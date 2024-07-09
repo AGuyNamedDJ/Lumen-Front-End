@@ -1,18 +1,18 @@
 import React from "react";
-import navbar from "./navbar";
-import footer from "./footer";
-import { Outlet, useNavigate, useOutletContext, useParams} from "react-router-dom"
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import { Outlet, useNavigate, useOutletContext, useParams} from "react-router-dom";
 
 
-const fetchForHomePage = () => {
+const FetchForHomePage = () => {
     return (
         <div className="content">
             
-            <navbar />
+            <Navbar />
             <Outlet />
-            <footer />
+            <Footer />
         </div>
     )
 }
 
-export default fetchForHomePage;
+export default FetchForHomePage;

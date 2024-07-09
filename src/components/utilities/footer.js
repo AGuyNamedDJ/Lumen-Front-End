@@ -1,6 +1,6 @@
 import React from 'react';
 
-function footer() {
+function Footer() {
   return (
     <footer>
       <p>&copy; 2024 Lumen. All rights reserved.</p>
@@ -8,4 +8,4 @@ function footer() {
   );
 }
 
-export default footer;
+export default Footer;

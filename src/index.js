@@ -4,17 +4,18 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { createRoot } from "react-dom/client";
 
 // Import: Utilities
-import fetchForHomePage from "./components/utilities/fetchForHomepage";
-import errorPage from "./components/utilities/errorPage";
+import FetchForHomePage from "./components/utilities/FetchForHomepage";
+import ErrorPage from "./components/utilities/ErrorPage";
 
 // Import: Pages
+import HomePage from "./components/pages/HomePage";
 
 // Brower Router
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <fetchForHomePage />,
-        errorElement: <errorPage />,
+        element: <FetchForHomePage />,
+        errorElement: <ErrorPage />,
         children: [
             {
                 index: true,
