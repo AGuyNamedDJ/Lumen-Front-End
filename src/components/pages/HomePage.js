@@ -1,11 +1,15 @@
 import React from 'react';
 
-function HomePage() {
+const HomePage = () => {
   return (
-    <div>
-      <h1>Welcome to Lumen</h1>
+    <div className="home-container">
+      <div className="background"></div>
+      <div className="content">
+        <h1 className="lumen-title">Lumen</h1>
+        <button className="sign-in-button">Sign In</button>
+      </div>
     </div>
   );
-}
+};
 
 export default HomePage;
