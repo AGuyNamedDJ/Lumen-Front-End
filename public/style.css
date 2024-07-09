@@ -58,25 +58,48 @@ body, html {
     height: 100%;
     background: url('https://static.vecteezy.com/system/resources/previews/027/536/321/original/light-bulb-light-bulb-light-bulb-transparent-background-ai-generative-free-png.png') no-repeat center center;
     background-size: cover;
-    opacity: 0.075; 
+    opacity: 0.025; 
 }
 
 .content {
     position: relative;
     text-align: center;
     z-index: 1;
-    top: -50px; /* Adjust this value to move the text upwards */
+    top: -80px; /* Move the text upwards */
 }
 
 .lumen-title {
     font-size: 15rem;
     color: rgba(0, 0, 0, 0); /* Make the inner part completely transparent */
-    -webkit-text-stroke: 2px rgba(255, 165, 0, 0.8); /* Bronze outline */
-    transition: -webkit-text-stroke 0.3s ease;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
 }
 
-.lumen-title:hover {
-    -webkit-text-stroke: 2px rgba(255, 165, 0, 1); /* More prominent bronze outline on hover */
+.letter {
+    position: relative;
+    display: inline-block;
+    -webkit-text-stroke: 2px rgba(255, 165, 0, 0.1); /* Slightly visible bronze outline */
+    color: transparent; /* Transparent interior */
+    transition: -webkit-text-stroke 0.1s ease, clip-path 0.1s ease;
+}
+
+.letter::before {
+    content: attr(data-letter);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-text-stroke: 2px rgba(255, 165, 0, 0.3); /* Initial bronze outline */
+    clip-path: circle(0% at var(--x) var(--y));
+    transition: clip-path 0.05s ease, -webkit-text-stroke 0.05s ease;
+}
+
+.letter:hover::before {
+    clip-path: circle(50% at var(--x) var(--y));
+    -webkit-text-stroke: 2px rgba(255, 165, 0, 1); /* Brighter bronze outline on hover */
 }
 
 .sign-in-button {
