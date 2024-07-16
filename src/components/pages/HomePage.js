@@ -35,7 +35,7 @@ const HomePage = () => {
         </h1>
         <p className="quote">Illuminating the Hidden</p>
         <Link to="/login">
-          <button className="sign-in-button">Sign In</button>
+          <button className="home-sign-in-button">Sign In</button>
         </Link>
         <p className="access-key-note">An access key is required to access Lumen.</p>
       </div>

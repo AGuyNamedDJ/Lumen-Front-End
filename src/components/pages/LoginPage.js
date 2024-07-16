@@ -1,7 +1,36 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = async (event) => {
+      event.preventDefault();
+      try {
+          const response = await fetch('/api/login', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ username, password }),
+          });
+
+          if (!response.ok) {
+              throw new Error('Invalid username or password');
+          }
+
+          const data = await response.json();
+          // Save user data to state or context if needed
+          console.log('Logged in user:', data);
+          navigate('/');
+      } catch (error) {
+          setError(error.message);
+      }
+  };
+
   return (
     <div className="login-container">
       <div className="login-box">

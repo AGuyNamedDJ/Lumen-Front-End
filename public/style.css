@@ -107,13 +107,13 @@ body, html {
 }
 
 /* Sign In Button */
-.sign-in-button {
+.home-sign-in-button {
     margin-top: 1px;
     margin-bottom: 15px;
     padding: 12px 140px; /* Increased padding for a larger button */
     font-size: 1.2rem;
     background-color: white;
-    border-radius: 2px;
+    /* border-radius: 2px; */
     color: black;
     border: none;
     cursor: pointer;
@@ -122,7 +122,16 @@ body, html {
     align-items: center;
     justify-content: center;
   }
-  
+
+.home-sign-in-button:hover {
+    opacity: 0.9; /* Decrease opacity on hover */
+    transform: scale(1.05); /* Slightly increase size on hover for effect */
+}
+
+.home-sign-in-button:active {
+    transform: scale(0.95); /* Click effect */
+}
+
 /* Quote */
 .quote {
     margin-top: 15px;
@@ -238,6 +247,28 @@ body, html {
     color: white; /* White text for Forgot password button */
     border-radius: 1rem; /* Rounded corners for Forgot password button */
     border: 1px solid #fff; /* White border for Forgot password button */
+}
+
+.sign-in-button:hover {
+    opacity: 0.8; /* Decrease opacity on hover */
+}
+
+.sign-in-button:active {
+    opacity: 0.6; /* Further decrease opacity on click */
+}
+
+.sign-in-button-google:hover,
+.sign-in-button-apple:hover,
+.sign-in-button-next:hover,
+.sign-in-button-forgot:hover {
+    opacity: 0.8; /* Decrease opacity on hover for all sign-in buttons */
+}
+
+.sign-in-button-google:active,
+.sign-in-button-apple:active,
+.sign-in-button-next:active,
+.sign-in-button-forgot:active {
+    opacity: 0.6; /* Further decrease opacity on click for all sign-in buttons */
 }
 
 .divider {
