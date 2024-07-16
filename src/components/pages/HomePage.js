@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
 
 const HomePage = () => {
   useEffect(() => {
@@ -31,7 +33,11 @@ const HomePage = () => {
             </span>
           ))}
         </h1>
-        <button className="sign-in-button">Sign In</button>
+        <p className="quote">Illuminating the Hidden</p>
+        <Link to="/login">
+          <button className="sign-in-button">Sign In</button>
+        </Link>
+        <p className="access-key-note">An access key is required to access Lumen.</p>
       </div>
     </div>
   );

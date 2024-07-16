@@ -80,11 +80,15 @@ body, html {
 .letter {
     position: relative;
     display: inline-block;
-    -webkit-text-stroke: 2px rgba(255, 165, 0, 0.1); /* Slightly visible bronze outline */
+    -webkit-text-stroke: 2px rgba(255, 165, 0, 0.15); /* Slightly visible bronze outline */
     color: transparent; /* Transparent interior */
     transition: -webkit-text-stroke 0.1s ease, clip-path 0.1s ease;
 }
 
+.lumen-title .letter {
+    transition: opacity 0.2s ease;
+  }
+  
 .letter::before {
     content: attr(data-letter);
     position: absolute;
@@ -102,17 +106,176 @@ body, html {
     -webkit-text-stroke: 2px rgba(255, 165, 0, 1); /* Brighter bronze outline on hover */
 }
 
+/* Sign In Button */
 .sign-in-button {
-    margin-top: 20px;
-    padding: 10px 20px;
+    margin-top: 1px;
+    margin-bottom: 15px;
+    padding: 12px 140px; /* Increased padding for a larger button */
     font-size: 1.2rem;
     background-color: white;
+    border-radius: 2px;
+    color: black;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+/* Quote */
+.quote {
+    margin-top: 15px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: normal;
+    font-size: 1.7em; /* Increased font size for visibility */
+    color: white;
+  }
+
+/* Access Key Note */
+.access-key-note {
+    margin-top: 10px;
+    font-size: 1rem; /* Smaller font size */
+    color: white;
+    opacity: 0.5;
+  }
+
+/* CSS for Login Page */
+/* General Styles */
+.login-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(128, 128, 128, 0.5); /* Grey background with higher opacity */
+    backdrop-filter: blur(5px); /* Add blur effect */
 }
 
-.sign-in-button:hover {
-    background-color: black;
+.login-box {
+    position: relative; /* Add position relative to position the close button */
+    background-color: #000;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    width: 90%;
+    height: 35%;
+    max-width: 40%;
+    border-radius: 1rem; /* Rounded corners for the mini window */
+}
+
+.close-button {
+    position: absolute;
+    top: 0.8rem;
+    left: 0.8rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: lighter;
     color: white;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.close-button:hover {
+    color: #ff8c00; /* Bronze color for hover effect */
+}
+
+.login-box h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.sign-in-button {
+    display: block;
+    width: 60%;
+    padding: 0.70rem;
+    margin: 1rem auto; /* Center buttons */
+    border-radius: 1rem;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.sign-in-button img {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+.sign-in-button-google {
+    background-color: #4285F4; /* Blue for Google button */
+    color: white;
+}
+
+.sign-in-button-apple {
+    background-color: white;
+    color: black;
+}
+
+.input-field {
+    width: 55%; 
+    padding: 0.75rem;
+    margin: 0.75rem auto; /* Center text box */
+    border-radius: 0.25rem; /* Square corners for text box */
+    border: 1px solid #555;
+    background-color: black;
+    color: grey;
+    font-size: 1rem;
+}
+
+.sign-in-button-next {
+    background-color: white; /* White background for Next button */
+    color: black; /* Black text for Next button */
+    border-radius: 1rem; /* Rounded corners for Next button */
+}
+
+.sign-in-button-forgot {
+    background-color: black; /* Black background for Forgot password button */
+    color: white; /* White text for Forgot password button */
+    border-radius: 1rem; /* Rounded corners for Forgot password button */
+    border: 1px solid #fff; /* White border for Forgot password button */
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1rem 0;
+    color: #aaa;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    border-bottom: 1px solid #aaa;
+    flex: 1;
+    margin: 0 90px; /* Add margin to decrease the width of the divider lines */
+}
+
+.divider::before {
+    margin-right: 0.5em;
+}
+
+.divider::after {
+    margin-left: 0.5em;
+}
+
+.alternate-login {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    opacity: 1; /* Lower the opacity of the entire text */
+}
+
+.alternate-login a {
+    color: #ff8c00; /* Bronze color */
+    text-decoration: none;
+    opacity: 1; /* Ensure the link has full opacity */
+}
+
+.alternate-login a:hover {
+    text-decoration: underline;
 }

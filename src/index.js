@@ -9,6 +9,7 @@ import ErrorPage from "./components/utilities/ErrorPage";
 
 // Import: Pages
 import HomePage from "./components/pages/HomePage";
+import LoginPage from "./components/pages/LoginPage";
 
 // Brower Router
 const router = createBrowserRouter([
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
                 index: true,
                 element: <HomePage />
             },
+            {
+                path: "login",
+                element: <LoginPage />
+            }
         ]
     }
 ])
