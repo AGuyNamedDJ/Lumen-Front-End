@@ -5,6 +5,7 @@ body, html {
     font-family: Arial, sans-serif;
     background-color: black;
     color: white;
+    overflow: hidden; /* Prevent scrolling */
 }
 
 /* Utilities */
@@ -96,7 +97,7 @@ body, html {
     left: 0;
     width: 100%;
     height: 100%;
-    -webkit-text-stroke: 2px rgba(255, 165, 0, 0.3); /* Initial bronze outline */
+    -webkit-text-stroke: 2px rgba(255, 165, 0, 0.3); 
     clip-path: circle(0% at var(--x) var(--y));
     transition: clip-path 0.05s ease, -webkit-text-stroke 0.05s ease;
 }
@@ -237,16 +238,16 @@ body, html {
 }
 
 .sign-in-button-next {
-    background-color: white; /* White background for Next button */
-    color: black; /* Black text for Next button */
-    border-radius: 1rem; /* Rounded corners for Next button */
+    background-color: white; 
+    color: black; 
+    border-radius: 1rem; 
 }
 
 .sign-in-button-forgot {
-    background-color: black; /* Black background for Forgot password button */
-    color: white; /* White text for Forgot password button */
-    border-radius: 1rem; /* Rounded corners for Forgot password button */
-    border: 1px solid #fff; /* White border for Forgot password button */
+    background-color: black; 
+    color: white;
+    border-radius: 1rem; 
+    border: 1px solid #fff; 
 }
 
 .sign-in-button:hover {
@@ -316,21 +317,24 @@ body, html {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 2rem;
     background-color: #121212; /* Dark background */
     color: white;
-    min-height: 100vh;
-  }
+    height: 100vh; /* Ensure it takes full viewport height */
+    position: relative;
+    justify-content: space-between; 
+    padding: 2rem; 
+    box-sizing: border-box; 
+    overflow: hidden; /* Prevent scrolling */
+}
   
-  /* Custom Navbar for Prompt Page */
-  .prompt-navbar {
+.prompt-navbar {
     position: fixed;
     top: 0;
     width: 100%;
     display: flex;
     justify-content: space-between;
     padding: 1rem;
-    background-color: #1a1a1a; /* Slightly lighter dark for navbar */
+    background-color: #121212; /* Slightly lighter dark for navbar */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     z-index: 1000;
   }
@@ -340,82 +344,183 @@ body, html {
     align-items: center;
   }
   
-  .navbar-dropdown, .new-message-button {
+  .navbar-dropdown {
     background: none;
     border: none;
     color: white;
-    font-size: 1rem;
+    font-size: 1.5rem; /* Increase the icon size */
     cursor: pointer;
     padding: 0.5rem 1rem;
+    opacity: 60%;
+    margin-left: 20%;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 60px; /* Adjust based on your navbar height */
+    left: 10px;
+    background-color: #1a1a1a;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    z-index: 1001; /* Ensure it appears above other elements */
+  }
+  
+  .dropdown-item {
+    padding: 0.5rem 1rem;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #ff7300;
   }
   
   .model-select {
     background: none;
     border: none;
     color: white;
-    font-size: 1rem;
+    font-size: 1.6rem;
+    opacity: 70%;
     cursor: pointer;
     padding: 0.5rem 1rem;
   }
   
-  .intro {
-    text-align: center;
-    margin-top: 5rem; /* Add margin to avoid overlap with navbar */
+  .new-message-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    margin-left: -15%; /* Adjust to move the emblem left */
   }
+
+  .new-message-button i {
+    font-size: 1.8rem; /* Adjust icon size */
+    opacity: 65%;
+  }
+
+  .intro {
+    text-align: left; 
+    margin-top: 6rem; 
+    width: 100%; 
+    padding: 0 1rem; 
+    padding-left: 3rem;
+    flex-grow: 1; /* Allow intro section to grow and fill available space */
+}
   
-  .example-prompts {
+  .greeting {
+    font-size: 3.5rem; /* Increased font size */
+    margin: 0;
+    background: linear-gradient(to right, hwb(33 22% 1%), #d3049f); /* Gradient color */
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+    
+  .help {
+    font-size: 3rem; /* Increased font size */
+    margin: 0;
+    color: rgba(170, 170, 170, 0.45); /* Grey color for the bottom line */
+  }
+
+/* Example Prompts */
+.example-prompts {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 1rem;
-    margin-top: 1rem;
-  }
-  
-  .example-prompt {
+    margin-top: 3rem; /* Pushes the example prompts down */
+}
+
+.example-prompt {
     background-color: #1a1a1a;
     padding: 1rem 2rem;
     border-radius: 1rem;
     cursor: pointer;
     transition: background-color 0.3s;
-  }
-  
-  .example-prompt:hover {
+    font-size: 1.2rem; /* Increased font size */
+}
+
+.example-prompt:hover {
     background-color: #2a2a2a;
-  }
-  
-  .message-input-container {
+}
+
+/* Message Input Container */
+.message-input-container {
     display: flex;
+    align-items: center;
     width: 100%;
-    max-width: 600px;
-    margin-top: 2rem;
-  }
-  
-  .message-input {
+    max-width: 850px;
+    position: relative;
+    box-sizing: border-box;
+    flex-shrink: 0; 
+    margin-bottom: 0rem; /* Ensure some spacing from the bottom */
+}
+
+.message-input {
     flex: 1;
-    padding: 1rem;
+    padding: 1.5rem 2rem;
     border: none;
-    border-radius: 0.5rem 0 0 0.5rem;
-    background-color: #1a1a1a;
-    color: white;
+    border-radius: 3rem;
+    background-color: #393939;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.1rem; 
+    color: rgba(255, 255, 255, 1);
     resize: none;
-  }
-  
-  .submit-button {
-    padding: 1rem;
+    padding-right: 50px; /* Space for the submit button */
+    box-sizing: border-box; 
+    display: flex;
+    align-items: center; 
+    height: 70px; 
+    transition: box-shadow 0.3s ease; /* Smooth transition for box-shadow */
+}
+
+.message-input::placeholder {
+    font-size: 1.1rem; 
+    color: rgba(255, 255, 255, 1);
+}
+
+/* Add gradient border on focus */
+.message-input:focus {
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 0 4px #ff8c00; 
+    background-clip: padding-box;
+    border-radius: 3rem; 
+}
+
+.submit-button {
+    position: absolute;
+    right: 15px;
+    background-color: #676767;
     border: none;
-    border-radius: 0 0.5rem 0.5rem 0;
-    background-color: #ff8c00; /* Bronze color */
-    color: white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     transition: background-color 0.3s;
-  }
-  
-  .submit-button:hover {
+}
+
+.submit-button i {
+    color: black; /* Changed arrow icon color to black */
+    font-size: 1.5rem; /* Increased font size for the arrow */
+    opacity: 60%;
+}
+
+.submit-button:hover {
     background-color: #e67e00;
-  }
-  
-  .disclaimer {
-    margin-top: 2rem;
-    font-size: 0.8rem;
+}
+
+.disclaimer {
+    font-size: 0.9rem;
     color: #aaa;
-  }
+    text-align: center; 
+    padding-bottom: 0rem; 
+    flex-shrink: 0;
+}

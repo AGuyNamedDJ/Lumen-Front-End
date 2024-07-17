@@ -5,7 +5,7 @@ import { Outlet, useLocation } from "react-router-dom";
 
 const FetchForHomePage = () => {
     const location = useLocation();
-    const showFooter = location.pathname !== "/login"; // Hide footer on login page
+    const showFooter = location.pathname !== "/login" && location.pathname !== "/lumen"; // Hide footer on login and lumen pages
 
     return (
         <div className="content">
