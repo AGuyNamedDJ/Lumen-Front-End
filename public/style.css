@@ -56,7 +56,7 @@ body, html {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: url('https://static.vecteezy.com/system/resources/previews/027/536/321/original/light-bulb-light-bulb-light-bulb-transparent-background-ai-generative-free-png.png') no-repeat center center;
+    /* background: url('https://static.vecteezy.com/system/resources/previews/027/536/321/original/light-bulb-light-bulb-light-bulb-transparent-background-ai-generative-free-png.png') no-repeat center center; */
     background-size: cover;
     opacity: 0.025; 
 }
@@ -310,3 +310,112 @@ body, html {
 .alternate-login a:hover {
     text-decoration: underline;
 }
+
+/* Prompt Page Styles */
+.prompt-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    background-color: #121212; /* Dark background */
+    color: white;
+    min-height: 100vh;
+  }
+  
+  /* Custom Navbar for Prompt Page */
+  .prompt-navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: #1a1a1a; /* Slightly lighter dark for navbar */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+  
+  .navbar-left, .navbar-center, .navbar-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbar-dropdown, .new-message-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+  }
+  
+  .model-select {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+  }
+  
+  .intro {
+    text-align: center;
+    margin-top: 5rem; /* Add margin to avoid overlap with navbar */
+  }
+  
+  .example-prompts {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  
+  .example-prompt {
+    background-color: #1a1a1a;
+    padding: 1rem 2rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .example-prompt:hover {
+    background-color: #2a2a2a;
+  }
+  
+  .message-input-container {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    margin-top: 2rem;
+  }
+  
+  .message-input {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    border-radius: 0.5rem 0 0 0.5rem;
+    background-color: #1a1a1a;
+    color: white;
+    resize: none;
+  }
+  
+  .submit-button {
+    padding: 1rem;
+    border: none;
+    border-radius: 0 0.5rem 0.5rem 0;
+    background-color: #ff8c00; /* Bronze color */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .submit-button:hover {
+    background-color: #e67e00;
+  }
+  
+  .disclaimer {
+    margin-top: 2rem;
+    font-size: 0.8rem;
+    color: #aaa;
+  }

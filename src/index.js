@@ -2,16 +2,19 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { createRoot } from "react-dom/client";
+import { UserProvider } from "./components/utilities/UserContext";
 
 // Import: Utilities
 import FetchForHomePage from "./components/utilities/FetchForHomepage";
 import ErrorPage from "./components/utilities/ErrorPage";
+import ProtectedRoute from "./components/utilities/ProtectedRoute";
 
 // Import: Pages
 import HomePage from "./components/pages/HomePage";
 import LoginPage from "./components/pages/LoginPage";
+import PromptPage from "./components/pages/PromptPage";
 
-// Brower Router
+// Browser Router
 const router = createBrowserRouter([
     {
         path: "/",
@@ -25,11 +28,23 @@ const router = createBrowserRouter([
             {
                 path: "login",
                 element: <LoginPage />
+            },
+            {
+                path: "lumen",
+                element: (
+                  <ProtectedRoute>
+                    <PromptPage />
+                  </ProtectedRoute>
+                )
             }
         ]
     }
-])
+]);
 
-const app = document.getElementById("apps")
-const root = createRoot(app)
-root.render(<RouterProvider router={router} />)
+const app = document.getElementById("apps");
+const root = createRoot(app);
+root.render(
+    <UserProvider>
+        <RouterProvider router={router} />
+    </UserProvider>
+);
