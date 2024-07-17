@@ -13,6 +13,7 @@ import ProtectedRoute from "./components/utilities/ProtectedRoute";
 import HomePage from "./components/pages/HomePage";
 import LoginPage from "./components/pages/LoginPage";
 import PromptPage from "./components/pages/PromptPage";
+import SignupPage from "./components/pages/SignupPage";
 
 // Browser Router
 const router = createBrowserRouter([
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
                     <PromptPage />
                   </ProtectedRoute>
                 )
+            },
+            {
+                path: "signup",
+                element: <SignupPage />
             }
         ]
     }

@@ -157,7 +157,7 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(128, 128, 128, 0.5); /* Grey background with higher opacity */
+    background-color: rgba(65, 65, 65, 0.5); /* Grey background with higher opacity */
     backdrop-filter: blur(5px); /* Add blur effect */
 }
 
@@ -221,11 +221,6 @@ body, html {
     color: white;
 }
 
-.sign-in-button-apple {
-    background-color: white;
-    color: black;
-}
-
 .input-field {
     width: 55%; 
     padding: 0.75rem;
@@ -233,8 +228,19 @@ body, html {
     border-radius: 0.25rem; /* Square corners for text box */
     border: 1px solid #555;
     background-color: black;
-    color: grey;
+    color: white; /* Changed from grey to white for better visibility */
     font-size: 1rem;
+}
+
+.input-field::placeholder {
+    color: rgba(255, 255, 255, 0.9); /* Increased opacity of placeholder text */
+}
+
+.input-field:focus {
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 0 4px #ff8c00; 
+    background-clip: padding-box;
+    border-radius: 0.25rem; /* Ensure this matches the border-radius of the input field */
 }
 
 .sign-in-button-next {
@@ -310,6 +316,162 @@ body, html {
 
 .alternate-login a:hover {
     text-decoration: underline;
+}
+
+/* CSS for Signup Page */
+/* General Styles */
+.signup-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(65, 65, 65, 0.5); /* Grey background with higher opacity */
+    backdrop-filter: blur(5px); /* Add blur effect */
+}
+
+.signup-box {
+    position: relative; /* Add position relative to position the close button */
+    background-color: #000;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    width: 90%;
+    max-width: 40%;
+    border-radius: 1rem; /* Rounded corners for the mini window */
+}
+
+.signup-close-button {
+    position: absolute;
+    top: 0.8rem;
+    left: 0.8rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: lighter;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.signup-close-button:hover {
+    color: #ff8c00; /* Bronze color for hover effect */
+}
+
+.signup-box h2 {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.signup-button {
+    display: block;
+    width: 60%;
+    padding: 0.70rem;
+    margin: 1rem auto; /* Center buttons */
+    border-radius: 1rem;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.signup-button img {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+.signup-button-google {
+    background-color: #4285F4; /* Blue for Google button */
+    color: white;
+}
+
+.signup-input-field {
+    width: 55%; 
+    padding: 0.75rem;
+    margin: 0.75rem auto; /* Center text box */
+    border-radius: 0.25rem; /* Square corners for text box */
+    border: 1px solid #555;
+    background-color: black;
+    color: white; /* Changed from grey to white for better visibility */
+    font-size: 1rem;
+}
+
+.signup-input-field::placeholder {
+    color: rgba(255, 255, 255, 0.9); /* Increased opacity of placeholder text */
+}
+
+.signup-input-field:focus {
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 0 4px #ff8c00; 
+    background-clip: padding-box;
+    border-radius: 0.25rem; /* Ensure this matches the border-radius of the input field */
+}
+
+.signup-button-next {
+    background-color: white; /* White background for Next button */
+    color: black; /* Black text for Next button */
+    border-radius: 1rem; /* Rounded corners for Next button */
+}
+
+.signup-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1rem 0;
+    color: #aaa;
+}
+
+.signup-divider::before,
+.signup-divider::after {
+    content: '';
+    border-bottom: 1px solid #aaa;
+    flex: 1;
+    margin: 0 90px; /* Add margin to decrease the width of the divider lines */
+}
+
+.signup-divider::before {
+    margin-right: 0.5em;
+}
+
+.signup-divider::after {
+    margin-left: 0.5em;
+}
+
+.signup-alternate-login {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    opacity: 1; /* Lower the opacity of the entire text */
+}
+
+.signup-alternate-login a {
+    color: #ff8c00; /* Bronze color */
+    text-decoration: none;
+    opacity: 1; /* Ensure the link has full opacity */
+}
+
+.signup-alternate-login a:hover {
+    text-decoration: underline;
+}
+
+.signup-button:hover {
+    opacity: 0.8; /* Decrease opacity on hover */
+}
+
+.signup-button:active {
+    opacity: 0.6; /* Further decrease opacity on click */
+}
+
+.signup-button-google:hover,
+.signup-button-next:hover {
+    opacity: 0.8; /* Decrease opacity on hover for all sign-in buttons */
+}
+
+.signup-button-google:active,
+.signup-button-next:active {
+    opacity: 0.6; /* Further decrease opacity on click for all sign-in buttons */
 }
 
 /* Prompt Page Styles */
