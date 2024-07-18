@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom'; 
 import { useUser } from '../utilities/UserContext';
 
 const PromptPage = () => {
@@ -7,7 +8,8 @@ const PromptPage = () => {
     const [showTooltip, setShowTooltip] = useState(false);
     const [modelDropdownOpen, setModelDropdownOpen] = useState(false);
     const [selectedModel, setSelectedModel] = useState("Lumen-1");
-    const [message, setMessage] = useState('');
+    const modelDropdownRef = useRef(null);
+    const menuDropdownRef = useRef(null);
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -22,9 +24,29 @@ const PromptPage = () => {
         setModelDropdownOpen(false);
     };
 
-    const handleExamplePromptClick = (prompt) => {
-        setMessage(prompt);
+    const handleClickOutside = (event) => {
+        if (modelDropdownRef.current && !modelDropdownRef.current.contains(event.target)) {
+            setModelDropdownOpen(false);
+        }
+        if (menuDropdownRef.current && !menuDropdownRef.current.contains(event.target)) {
+            setMenuOpen(false);
+        }
     };
+
+    useEffect(() => {
+        if (modelDropdownOpen || menuOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+            document.body.classList.add('modal-open');
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.body.classList.remove('modal-open');
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.body.classList.remove('modal-open');
+        };
+    }, [modelDropdownOpen, menuOpen]);
 
     return (
         <div className="prompt-container">
@@ -34,16 +56,41 @@ const PromptPage = () => {
                         <i className="fas fa-bars-staggered"></i>
                     </button>
                     {menuOpen && (
-                        <div className="dropdown-menu">
-                            <div className="dropdown-item">Lumen-1</div>
-                            <div className="dropdown-item">ABRO</div>
-                            <div className="dropdown-item">Crafting Prompt Titles</div>
-                            <div className="dropdown-item">Seeking Historic Charm</div>
+                        <div className="left-dropdown-menu">
+                            <div className="dropdown-section">
+                                <Link to="/" className="dropdown-item">
+                                    <i className="fas fa-lightbulb"></i> {/* Add the icon */}
+                                    <span>Lumen</span> {/* Add the word Lumen */}
+                                </Link>
+                            </div>
+                            <div className="dropdown-section">
+                                <div className="dropdown-heading">Today</div>
+                                <div className="dropdown-item">Chat 1</div>
+                            </div>
+                            <div className="dropdown-section">
+                                <div className="dropdown-heading">Yesterday</div>
+                                <div className="dropdown-item">Chat 2</div>
+                            </div>
+                            <div className="dropdown-section">
+                                <div className="dropdown-heading">Previous 7 Days</div>
+                                <div className="dropdown-item">Chat 3</div>
+                                <div className="dropdown-item">Chat 4</div>
+                            </div>
+                            <div className="dropdown-section">
+                                <div className="dropdown-heading">Previous 30 Days</div>
+                                <div className="dropdown-item">Chat 5</div>
+                            </div>
+                            <div className="dropdown-section user-section">
+                                <div className="dropdown-item user-info" onClick={() => console.log('Redirect to settings')}>
+                                    <img src="path/to/profile-picture" alt="Profile" className="profile-image"/>
+                                    {user ? `${user.first_name} ${user.last_name}` : '[Your Name]'}
+                                </div>
+                            </div>
                         </div>
                     )}
                 </div>
                 <div className="navbar-center">
-                    <div className="model-select-wrapper">
+                    <div className="model-select-wrapper" ref={modelDropdownRef}>
                         <div className="model-select" onClick={toggleModelDropdown}>
                             {selectedModel} <i className="fa fa-caret-down"></i>
                         </div>
@@ -62,7 +109,7 @@ const PromptPage = () => {
                                     {selectedModel === 'Lumen-2' && <i className="fa fa-check-circle check-mark"></i>}
                                 </div>
                                 <div className="model-item" onClick={() => handleModelSelect('Lumen-1')}>
-                                    <i className="fas fa-lightbulb"></i> {/* New icon for Lumen-1 */}
+                                    <i className="fas fa-lightbulb"></i>
                                     <div>
                                         <div className="model-name">Lumen-1</div>
                                         <div className="model-description">Advanced model for general tasks</div>
@@ -88,27 +135,14 @@ const PromptPage = () => {
                 <h1 className="greeting">Hello, {user ? user.first_name : '[Your Name]'}</h1>
                 <h1 className="help">How can I help you today?</h1>
                 <div className="example-prompts">
-                    <div className="example-prompt" onClick={() => handleExamplePromptClick('Explain what is a Call Option.')}>
-                        Explain what is a Call Option.
-                    </div>
-                    <div className="example-prompt" onClick={() => handleExamplePromptClick('Where do you see $SPX closing today?')}>
-                        Where do you see $SPX closing today?
-                    </div>
-                    <div className="example-prompt" onClick={() => handleExamplePromptClick('Is $SPX currently bearish?')}>
-                        Is $SPX currently bearish?
-                    </div>
-                    <div className="example-prompt" onClick={() => handleExamplePromptClick('What is the next major move you see with $SPX?')}>
-                        What is the next major move you see with $SPX?
-                    </div>
+                    <div className="example-prompt">Explain what is a Call Option.</div>
+                    <div className="example-prompt">Where do you see $SPX closing today?</div>
+                    <div className="example-prompt">Is $SPX currently bearish?</div>
+                    <div className="example-prompt">What is the next major move you see with $SPX?</div>
                 </div>
             </div>
             <div className="message-input-container">
-                <textarea 
-                    className="message-input" 
-                    placeholder="Message Lumen" 
-                    value={message} 
-                    onChange={(e) => setMessage(e.target.value)} 
-                />
+                <textarea className="message-input" placeholder="Message Lumen"></textarea>
                 <button className="submit-button">
                     <i className="fa fa-arrow-up"></i>
                 </button>

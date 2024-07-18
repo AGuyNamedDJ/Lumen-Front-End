@@ -496,7 +496,7 @@ body, html {
     display: flex;
     justify-content: space-between;
     padding: 1rem;
-    background-color: #121212; /* Slightly lighter dark for navbar */
+    background-color: #121212; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     z-index: 1000;
 }
@@ -517,26 +517,120 @@ body, html {
     margin-left: 20%;
 }
   
-.dropdown-menu {
+.left-dropdown-menu {
+    display: flex;
+    flex-direction: column;
     position: absolute;
-    top: 60px;
-    left: 10px;
+    top: 75px;
+    left: 0;
     background-color: #1a1a1a;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     border-radius: 0.5rem;
     overflow: hidden;
-    z-index: 1001; /* Ensure it appears above other elements */
+    z-index: 1001;
+    width: 300px; 
+    height: calc(100vh - 60px); /* Adjust the height to fill the screen */
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-section {
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.dropdown-heading {
+    color: #bbb;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    text-align: left;
+    padding: 1vh;
+    padding-left: 1vh;
 }
 
 .dropdown-item {
     padding: 0.5rem 1rem;
     color: white;
     cursor: pointer;
+    display: flex;
+    font-size: 1.1rem;
     transition: background-color 0.3s;
+    text-align: left;
+    transition: background-color 0.3s ease, border-radius 0.3s ease; /* Ensure smooth transition for both properties */
+    border-radius: 0.5rem; 
+    text-decoration: none;
+    justify-content: flex-start;
+}
+
+.dropdown-item i {
+    margin-right: 0.5rem; /* Space between the icon and text */
+    font-size: 1.6rem; /* Adjust icon size if necessary */
 }
 
 .dropdown-item:hover {
-    background-color: #ff7300;
+    background-color: rgba(255, 255, 255, 0.176);
+    border-radius: 0.5rem; /* Add border radius */
+    transition: background-color 0.1s, border-radius 0.1s; /* Ensure smooth transition */
+}
+
+.dropdown-section:first-of-type {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Adjust the color and opacity as needed */
+    padding-bottom: 0.5rem; /* Space below the border */
+    padding-top: o.5rem;
+    margin-bottom: 0.5rem; /* Space below the section */
+    width: 100%;
+}
+
+.dropdown-item span {
+    font-size: 1.4rem;
+    color: white; 
+    opacity: 80%;
+}
+
+.profile-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    backdrop-filter: blur(1px); /* Adds blur effect */
+    z-index: 1000; /* Ensure it appears below the dropdown menu but above other content */
+}
+
+.user-section {
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* Add a top border to separate the user section */
+    position: absolute;
+    bottom: 1rem;
+    width: 100%; /* Ensure it takes full width of the sidebar */
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease, border-radius 0.3s ease; /* Ensure smooth transition for both properties */
+    border-radius: 0.5rem;
+}
+
+.user-info:hover {
+    background-color: rgba(255, 255, 255, 0.176); 
+    border-radius: 0.5rem; 
+    transition: background-color 0.1s, border-radius 0.1s; /* Ensure smooth transition */
+}
+
+
+.profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 1rem;
 }
 
 .model-select-wrapper {
@@ -552,6 +646,12 @@ body, html {
     opacity: 70%;
     cursor: pointer;
     padding: 0.5rem 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.model-select:hover {
+    background-color: rgba(255, 255, 255, 0.176); /* Brighter color on hover */
+    border-radius: 0.8rem; /* Add some border radius for rounded corners */
 }
 
 .model-dropdown {
@@ -586,12 +686,19 @@ body, html {
 .model-dropdown-header .header-icon {
     text-align: right;
 }
+
 .model-item {
     display: flex;
     align-items: center;
     padding: 1rem 0.5rem;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, border-radius 0.3s; /* Smooth transition */
     color: white;
+    border-radius: 0.8rem; 
+}
+
+.model-item:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Light color on hover */
+    border-radius: 0.8rem;
 }
 
 .model-header-text {
@@ -601,6 +708,8 @@ body, html {
 .model-item i {
     margin-right: 1.5rem;
     font-size: 1.5rem;
+    padding-left: 0.5rem; /* Add padding to the left of the icon */
+    padding-right: 0.5rem; /* Add padding to the right of the icon */
 }
 
 .model-item div {
@@ -628,6 +737,7 @@ body, html {
 }
 
 .new-message-button {
+    position: relative;
     background: none;
     border: none;
     color: white;
@@ -642,7 +752,6 @@ body, html {
     opacity: 65%;
 }
 
-/* Tooltip Styles */
 .tooltip {
     position: absolute;
     top: 125%; /* Adjust the position to be below the button */
@@ -652,6 +761,7 @@ body, html {
     color: #fff; 
     text-align: center;
     padding: 0.5rem 1rem;
+    margin-left: -55%; /* Adjust to move the emblem left */
     border-radius: 0.5rem;
     white-space: nowrap; /* Prevent line breaks */
     opacity: 0;
@@ -671,8 +781,8 @@ body, html {
     padding-left: 3rem;
     flex-grow: 1; /* Allow intro section to grow and fill available space */
 }
-  
-  .greeting {
+
+.greeting {
     font-size: 3.5rem; /* Increased font size */
     margin: 0;
     background: linear-gradient(to right, hwb(33 22% 1%), #d3049f); /* Gradient color */
@@ -680,13 +790,13 @@ body, html {
     -webkit-background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
-  }
-    
-  .help {
+}
+
+.help {
     font-size: 3rem; /* Increased font size */
     margin: 0;
     color: rgba(170, 170, 170, 0.45); /* Grey color for the bottom line */
-  }
+}
 
 /* Example Prompts */
 .example-prompts {
@@ -705,7 +815,6 @@ body, html {
     transition: background-color 0.3s;
     font-size: 1.2rem; /* Increased font size */
     border: 1px solid rgba(255, 255, 255, 0.1); /* Thin white border with slight opacity */
-
 }
 
 .example-prompt:hover {
