@@ -591,7 +591,14 @@ body, html {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    margin-right: 0.5rem;
+    margin-right: 10px;
+    object-fit: cover; /* Ensure the image covers the container without distortion */
+
+}
+
+.home-link-text {
+    font-size: 1.2rem; /* Adjust as needed */
+    margin-left: 0.5rem; /* Space between the icon and the text */
 }
 
 .backdrop {
@@ -752,16 +759,14 @@ body, html {
     opacity: 65%;
 }
 
+/* Common Tooltip Styles */
 .tooltip {
     position: absolute;
-    top: 125%; /* Adjust the position to be below the button */
-    left: 50%;
-    transform: translateX(-50%);
+    top: 125%;
     background-color: #000; 
     color: #fff; 
     text-align: center;
     padding: 0.5rem 1rem;
-    margin-left: -55%; /* Adjust to move the emblem left */
     border-radius: 0.5rem;
     white-space: nowrap; /* Prevent line breaks */
     opacity: 0;
@@ -769,8 +774,21 @@ body, html {
     z-index: 10; /* Ensure it appears above other elements */
 }
 
+/* Tooltip for New Message Button */
 .new-message-button:hover .tooltip {
     opacity: 1;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-left: -55%;
+}
+
+/* Tooltip for Menu Button */
+.navbar-dropdown:hover .tooltip {
+    opacity: 1;
+    top: 90%;
+    left: 0; 
+    transform: translateX(0); /* No translation needed */
+    margin-left: 1.5rem; 
 }
 
 .intro {

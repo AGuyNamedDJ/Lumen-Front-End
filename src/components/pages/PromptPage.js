@@ -6,10 +6,13 @@ const PromptPage = () => {
     const user = useUser();
     const [menuOpen, setMenuOpen] = useState(false);
     const [showTooltip, setShowTooltip] = useState(false);
+    const [showMenuTooltip, setShowMenuTooltip] = useState(false); // State for menu tooltip
     const [modelDropdownOpen, setModelDropdownOpen] = useState(false);
     const [selectedModel, setSelectedModel] = useState("Lumen-1");
+    const [message, setMessage] = useState(""); // Add state for message input
     const modelDropdownRef = useRef(null);
     const menuDropdownRef = useRef(null);
+    const menuButtonRef = useRef(null); // Ref for menu button
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
@@ -28,8 +31,15 @@ const PromptPage = () => {
         if (modelDropdownRef.current && !modelDropdownRef.current.contains(event.target)) {
             setModelDropdownOpen(false);
         }
-        if (menuDropdownRef.current && !menuDropdownRef.current.contains(event.target)) {
-            setMenuOpen(false);
+        if (
+            menuDropdownRef.current && 
+            !menuDropdownRef.current.contains(event.target) &&
+            menuButtonRef.current &&
+            !menuButtonRef.current.contains(event.target)
+        ) {
+            setTimeout(() => {
+                setMenuOpen(false);
+            }, 150); // Small delay to avoid immediate reopening
         }
     };
 
@@ -48,19 +58,40 @@ const PromptPage = () => {
         };
     }, [modelDropdownOpen, menuOpen]);
 
+    useEffect(() => {
+        console.log("User Object:", user);
+    }, [user]);
+
+    const handleImageError = (e) => {
+        console.error("Image failed to load:", e.target.src);
+        e.target.onerror = null; 
+        e.target.src = "path/to/default-profile-picture";
+    };
+
+    const handleExampleClick = (prompt) => {
+        setMessage(prompt);
+    };
+
     return (
         <div className="prompt-container">
             <nav className="prompt-navbar">
                 <div className="navbar-left">
-                    <button className="navbar-dropdown" onClick={toggleMenu}>
+                    <button
+                        className="navbar-dropdown"
+                        onClick={toggleMenu}
+                        onMouseEnter={() => setShowMenuTooltip(true)}
+                        onMouseLeave={() => setShowMenuTooltip(false)}
+                        ref={menuButtonRef}
+                    >
                         <i className="fas fa-bars-staggered"></i>
+                        {showMenuTooltip && <div className="tooltip menu-tooltip">Expand menu</div>} {/* Tooltip for menu */}
                     </button>
                     {menuOpen && (
-                        <div className="left-dropdown-menu">
+                        <div className="left-dropdown-menu" ref={menuDropdownRef}>
                             <div className="dropdown-section">
                                 <Link to="/" className="dropdown-item">
                                     <i className="fas fa-lightbulb"></i> {/* Add the icon */}
-                                    <span>Lumen</span> {/* Add the word Lumen */}
+                                    <span className="home-link-text">Lumen</span> {/* Add the word Lumen */}
                                 </Link>
                             </div>
                             <div className="dropdown-section">
@@ -82,7 +113,7 @@ const PromptPage = () => {
                             </div>
                             <div className="dropdown-section user-section">
                                 <div className="dropdown-item user-info" onClick={() => console.log('Redirect to settings')}>
-                                    <img src="path/to/profile-picture" alt="Profile" className="profile-image"/>
+                                    <img src={user?.profile_picture_url} alt="Profile" className="profile-image" onError={handleImageError} />
                                     {user ? `${user.first_name} ${user.last_name}` : '[Your Name]'}
                                 </div>
                             </div>
@@ -127,22 +158,35 @@ const PromptPage = () => {
                         onMouseLeave={() => setShowTooltip(false)}
                     >
                         <i className="fa fa-pen-to-square"></i>
+                        {showTooltip && <div className="tooltip message-tooltip">New chat</div>} {/* Tooltip for new chat */}
                     </button>
-                    {showTooltip && <div className="tooltip">New chat</div>}
                 </div>
             </nav>
             <div className="intro">
                 <h1 className="greeting">Hello, {user ? user.first_name : '[Your Name]'}</h1>
                 <h1 className="help">How can I help you today?</h1>
                 <div className="example-prompts">
-                    <div className="example-prompt">Explain what is a Call Option.</div>
-                    <div className="example-prompt">Where do you see $SPX closing today?</div>
-                    <div className="example-prompt">Is $SPX currently bearish?</div>
-                    <div className="example-prompt">What is the next major move you see with $SPX?</div>
+                    <div className="example-prompt" onClick={() => handleExampleClick("Explain what is a Call Option.")}>
+                        Explain what is a Call Option.
+                    </div>
+                    <div className="example-prompt" onClick={() => handleExampleClick("Where do you see $SPX closing today?")}>
+                        Where do you see $SPX closing today?
+                    </div>
+                    <div className="example-prompt" onClick={() => handleExampleClick("Is $SPX currently bearish?")}>
+                        Is $SPX currently bearish?
+                    </div>
+                    <div className="example-prompt" onClick={() => handleExampleClick("What is the next major move you see with $SPX?")}>
+                        What is the next major move you see with $SPX?
+                    </div>
                 </div>
             </div>
             <div className="message-input-container">
-                <textarea className="message-input" placeholder="Message Lumen"></textarea>
+                <textarea 
+                    className="message-input" 
+                    placeholder="Message Lumen"
+                    value={message} // Bind the message state to the textarea
+                    onChange={(e) => setMessage(e.target.value)} // Update message state on change
+                ></textarea>
                 <button className="submit-button">
                     <i className="fa fa-arrow-up"></i>
                 </button>
