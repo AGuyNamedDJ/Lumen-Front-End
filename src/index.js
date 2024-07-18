@@ -5,7 +5,7 @@ import { createRoot } from "react-dom/client";
 import { UserProvider } from "./components/utilities/UserContext";
 
 // Import: Utilities
-import fetchForHomePage from "./components/utilities/fetchForHomepage";
+import FetchForHomePage from "./components/utilities/fetchForHomepage";
 import errorPage from "./components/utilities/errorPage";
 import ProtectedRoute from "./components/utilities/ProtectedRoute";
 
@@ -20,7 +20,7 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <FetchForHomePage />,
-        errorElement: <ErrorPage />,
+        errorElement: <errorPage />,
         children: [
             {
                 index: true,
