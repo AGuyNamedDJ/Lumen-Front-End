@@ -27,7 +27,13 @@ const LoginPage = () => {
             alert('Failed to log in. Please check your username or password.');
         }
     }
-};
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+        handleNextClick();
+    }
+  };
 
   return (
     <div className="login-container">
@@ -50,6 +56,7 @@ const LoginPage = () => {
             className="input-field"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            onKeyPress={handleKeyPress}
           />
         )}
         {step === 2 && (
@@ -59,6 +66,7 @@ const LoginPage = () => {
             className="input-field"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            onKeyPress={handleKeyPress}
           />
         )}
         <button

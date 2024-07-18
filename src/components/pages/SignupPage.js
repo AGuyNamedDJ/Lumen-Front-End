@@ -38,6 +38,12 @@ const SignupPage = () => {
     }
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleNextClick();
+    }
+  };
+
   return (
     <div className="signup-container">
       <div className="signup-box">
@@ -60,6 +66,7 @@ const SignupPage = () => {
               className="input-field"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onKeyPress={handleKeyPress} // Listen for Enter key press
             />
             <input
               type="text"
@@ -67,6 +74,7 @@ const SignupPage = () => {
               className="input-field"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              onKeyPress={handleKeyPress} // Listen for Enter key press
             />
           </>
         )}
@@ -78,6 +86,7 @@ const SignupPage = () => {
               className="input-field"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyPress={handleKeyPress} // Listen for Enter key press
             />
             <input
               type="text"
@@ -85,6 +94,7 @@ const SignupPage = () => {
               className="input-field"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
+              onKeyPress={handleKeyPress} // Listen for Enter key press
             />
             <input
               type="text"
@@ -92,6 +102,7 @@ const SignupPage = () => {
               className="input-field"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
+              onKeyPress={handleKeyPress} // Listen for Enter key press
             />
           </>
         )}
