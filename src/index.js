@@ -6,7 +6,7 @@ import { UserProvider } from "./components/utilities/UserContext";
 
 // Import: Utilities
 import fetchForHomePage from "./components/utilities/fetchForHomepage";
-import ErrorPage from "./components/utilities/ErrorPage";
+import errorPage from "./components/utilities/errorPage";
 import ProtectedRoute from "./components/utilities/ProtectedRoute";
 
 // Import: Pages
