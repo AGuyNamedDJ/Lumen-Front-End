@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import { Outlet, useLocation } from "react-router-dom";
 
-const FetchForHomePage = () => {
+const fetchForHomePage = () => {
     const location = useLocation();
     const showFooter = location.pathname !== "/login" && location.pathname !== "/lumen"; // Hide footer on login and lumen pages
 
@@ -16,4 +16,4 @@ const FetchForHomePage = () => {
     );
 };
 
-export default FetchForHomePage;
+export default fetchForHomePage;

@@ -5,7 +5,7 @@ import { createRoot } from "react-dom/client";
 import { UserProvider } from "./components/utilities/UserContext";
 
 // Import: Utilities
-import FetchForHomePage from "./components/utilities/FetchForHomepage";
+import fetchForHomePage from "./components/utilities/fetchForHomepage";
 import ErrorPage from "./components/utilities/ErrorPage";
 import ProtectedRoute from "./components/utilities/ProtectedRoute";
 
