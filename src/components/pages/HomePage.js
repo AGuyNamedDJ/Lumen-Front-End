@@ -1,17 +1,31 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-
 const HomePage = () => {
   useEffect(() => {
+    const letters = document.querySelectorAll('.letter');
+
+    const setInitialDarkState = () => {
+      letters.forEach((letter) => {
+        const rect = letter.getBoundingClientRect();
+        const x = rect.width / 2;
+        const y = rect.height / 2;
+        letter.style.setProperty('--x', `${x}px`);
+        letter.style.setProperty('--y', `${y}px`);
+        letter.style.clipPath = `circle(0% at ${x}px ${y}px)`;
+      });
+    };
+
+    setInitialDarkState();
+
     const handleMouseMove = (event) => {
-      const letters = document.querySelectorAll('.letter');
       letters.forEach((letter) => {
         const rect = letter.getBoundingClientRect();
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
         letter.style.setProperty('--x', `${x}px`);
         letter.style.setProperty('--y', `${y}px`);
+        letter.style.clipPath = `circle(60% at ${x}px ${y}px)`; // Increase the percentage to make the circle larger
       });
     };
 
@@ -33,10 +47,14 @@ const HomePage = () => {
             </span>
           ))}
         </h1>
-        <p className="quote">Illuminating the Hidden</p>
-        <Link to="/login">
-          <button className="home-sign-in-button">Sign In</button>
-        </Link>
+        <div className="button-container">
+          <Link to="/login">
+            <button className="home-button home-sign-in-button">Sign In</button>
+          </Link>
+          <Link to="/learn-more">
+            <button className="home-button learn-more-button">Learn More</button>
+          </Link>
+        </div>
         <p className="access-key-note">An access key is required to access Lumen.</p>
       </div>
     </div>

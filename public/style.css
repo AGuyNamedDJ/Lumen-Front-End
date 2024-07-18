@@ -57,9 +57,8 @@ body, html {
     position: absolute;
     width: 100%;
     height: 100%;
-    /* background: url('https://static.vecteezy.com/system/resources/previews/027/536/321/original/light-bulb-light-bulb-light-bulb-transparent-background-ai-generative-free-png.png') no-repeat center center; */
     background-size: cover;
-    opacity: 0.025; 
+    opacity: 0.025;
 }
 
 .content {
@@ -88,8 +87,8 @@ body, html {
 
 .lumen-title .letter {
     transition: opacity 0.2s ease;
-  }
-  
+}
+
 .letter::before {
     content: attr(data-letter);
     position: absolute;
@@ -100,47 +99,68 @@ body, html {
     -webkit-text-stroke: 2px rgba(255, 165, 0, 0.3); 
     clip-path: circle(0% at var(--x) var(--y));
     transition: clip-path 0.05s ease, -webkit-text-stroke 0.05s ease;
-}
-
-.letter:hover::before {
+  }
+  
+  .letter:hover::before {
     clip-path: circle(50% at var(--x) var(--y));
     -webkit-text-stroke: 2px rgba(255, 165, 0, 1); /* Brighter bronze outline on hover */
+  }
+
+/* Button Container */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
 }
 
-/* Sign In Button */
-.home-sign-in-button {
+/* Home Button */
+.home-button {
     margin-top: 1px;
     margin-bottom: 15px;
-    padding: 12px 140px; /* Increased padding for a larger button */
+    padding: 12px 80px; /* Adjusted padding */
     font-size: 1.2rem;
-    background-color: white;
-    /* border-radius: 2px; */
-    color: black;
-    border: none;
+    border-radius: 1.2rem; /* Updated border radius */
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s, transform 0.3s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-  }
-
-.home-sign-in-button:hover {
-    opacity: 0.9; /* Decrease opacity on hover */
-    transform: scale(1.05); /* Slightly increase size on hover for effect */
+    text-decoration: none;
+    border: none; /* Remove border */
 }
 
-.home-sign-in-button:active {
-    transform: scale(0.95); /* Click effect */
+/* First child - Sign In */
+.button-container a:first-child .home-button {
+    background: linear-gradient(to right, hwb(33 22% 1%), #d35a04); /* Gradient color */
+    color: white; /* White text */
+    opacity: 85%;
 }
 
-/* Quote */
-.quote {
-    margin-top: 15px;
-    font-family: 'Times New Roman', Times, serif;
-    font-weight: normal;
-    font-size: 1.7em;
-    color: white;
-  }
+.button-container a:first-child .home-button:hover {
+    background: linear-gradient(to right, hwb(20 22% 1%), #d30426); /* Gradient color */
+    transform: scale(1.05);
+}
+
+.button-container a:first-child .home-button:active {
+    transform: scale(0.95);
+}
+
+/* Last child - Learn More */
+.button-container a:last-child .home-button {
+    background-color: white;
+    color: black;
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Thin black border */
+}
+
+.button-container a:last-child .home-button:hover {
+    background-color: #f2f2f2; /* Slightly darker white on hover */
+    transform: scale(1.05);
+}
+
+.button-container a:last-child .home-button:active {
+    transform: scale(0.95);
+}
 
 /* Access Key Note */
 .access-key-note {
@@ -148,7 +168,7 @@ body, html {
     font-size: 1rem;
     color: white;
     opacity: 0.5;
-  }
+}
 
 /* CSS for Login Page */
 /* General Styles */
@@ -157,7 +177,7 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(65, 65, 65, 0.5);
+    background-color: black;
     backdrop-filter: blur(5px); /* Add blur effect */
 }
 
@@ -325,7 +345,7 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgba(65, 65, 65, 0.5); 
+    background-color: black; 
     backdrop-filter: blur(5px); /* Add blur effect */
 }
 
