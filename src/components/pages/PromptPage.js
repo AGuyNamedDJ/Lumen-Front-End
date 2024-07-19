@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom'; 
 import { useUser } from '../utilities/UserContext';
-import { sendMessageToAI } from '../services/apiService';
+import { sendMessageToAI, fetchChatHistoryAPI, fetchMessagesAPI } from '../services/apiService';
 
 const PromptPage = () => {
     const user = useUser();
@@ -11,9 +11,12 @@ const PromptPage = () => {
     const [modelDropdownOpen, setModelDropdownOpen] = useState(false);
     const [selectedModel, setSelectedModel] = useState("Lumen-1");
     const [message, setMessage] = useState(""); 
-    const [conversation, setConversation] = useState([]); 
-    const [loading, setLoading] = useState(false); 
+    const [messages, setMessages] = useState([]); 
+    const [chatHistory, setChatHistory] = useState([]); 
     const [conversationStarted, setConversationStarted] = useState(false);
+    const [currentConversation, setCurrentConversation] = useState(null);
+    const [currentConversationId, setCurrentConversationId] = useState(null); 
+    const [loading, setLoading] = useState(false); 
     const modelDropdownRef = useRef(null);
     const menuDropdownRef = useRef(null);
     const menuButtonRef = useRef(null); 
@@ -45,7 +48,29 @@ const PromptPage = () => {
         ) {
             setTimeout(() => {
                 setMenuOpen(false);
-            }, 150); // Small delay to avoid immediate reopening
+            }, 150); 
+        }
+    };
+
+    const fetchChatHistoryData = async (userId) => {
+        try {
+            const response = await fetchChatHistoryAPI(userId); 
+            console.log('Fetched chat history:', response);
+            return response;
+        } catch (error) {
+            console.error('Error fetching chat history:', error);
+            throw error;
+        }
+    };
+
+    const fetchMessages = async (conversationId) => {
+        try {
+            const messages = await fetchMessagesAPI(conversationId); 
+            console.log('Fetched messages:', messages);
+            return messages;
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+            throw error;
         }
     };
 
@@ -65,14 +90,58 @@ const PromptPage = () => {
     }, [modelDropdownOpen, menuOpen]);
 
     useEffect(() => {
-        console.log("User Object:", user);
+        const fetchHistoryAndMessages = async () => {
+            if (user) {
+                console.log("Fetching chat history for user:", user.id);
+                try {
+                    const chatHistory = await fetchChatHistoryData(user.id);
+                    console.log("Fetched chat history:", chatHistory);
+
+                    if (Array.isArray(chatHistory) && chatHistory.length > 0) {
+                        const uniqueConversations = chatHistory.filter(
+                            (value, index, self) => 
+                                index === self.findIndex((t) => t.id === value.id)
+                        );
+
+                        setChatHistory(uniqueConversations);
+                        const firstConversation = uniqueConversations[0];
+                        setCurrentConversation(firstConversation);
+                        setCurrentConversationId(firstConversation.id);
+                        console.log("Fetching messages for conversation:", firstConversation.id);
+
+                        const messages = await fetchMessagesAPI(firstConversation.id);
+                        console.log("Fetched messages:", messages);
+
+                        if (messages) {
+                            setMessages(messages);
+                        }
+                    } else {
+                        console.warn("No chat history found for user:", user.id);
+                    }
+                } catch (error) {
+                    console.error('Error fetching chat history or messages:', error);
+                }
+            }
+        };
+    
+        fetchHistoryAndMessages();
     }, [user]);
 
     useEffect(() => {
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
-    }, [conversation]);
+    }, [messages]);
+
+    const handleConversationSelect = async (conversation) => {
+        setCurrentConversation(conversation);
+        try {
+            const fetchedMessages = await fetchMessagesAPI(conversation.id);
+            setMessages(fetchedMessages); 
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+        }
+    };
 
     const handleImageError = (e) => {
         console.error("Image failed to load:", e.target.src);
@@ -80,22 +149,76 @@ const PromptPage = () => {
         e.target.src = "path/to/default-profile-picture";
     };
 
-    const handleExampleClick = (prompt) => {
+    const handleExampleClick = async (prompt) => {
         setMessage(prompt);
+    
+        // Clear previous conversation and messages
+        setCurrentConversation(null);
+        setCurrentConversationId(null);
+        setMessages([]);
+        setConversationStarted(false);
+    
+        // Set the new prompt as a message
+        setTimeout(() => handleSendMessage(), 100);
     };
-
+    
     const handleSendMessage = async () => {
         if (message.trim() === "") return;
     
         setConversationStarted(true); // Set conversation started to true
     
-        const newConversation = [...conversation, { role: 'user', content: message }];
-        setConversation(newConversation);
+        const userMessage = { role: 'user', content: message };
+        let newConversationId = currentConversationId;
+    
+        // Create a new conversation if one doesn't exist
+        if (!currentConversationId) {
+            try {
+                const response = await fetch('https://lumen-0q0f.onrender.com/api/conversations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId: user.id })
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Failed to create a new conversation');
+                }
+    
+                const data = await response.json();
+                newConversationId = data.id;
+                setCurrentConversationId(newConversationId);
+    
+                // Add the new conversation to the chat history
+                setChatHistory(prevChatHistory => [
+                    ...prevChatHistory,
+                    { id: newConversationId, created_at: new Date(), user_id: user.id }
+                ]);
+    
+                // Set the new conversation as the current conversation
+                setCurrentConversation({ id: newConversationId, messages: [] });
+    
+                // Clear previous messages
+                setMessages([userMessage]);
+            } catch (error) {
+                console.error('Error creating new conversation:', error);
+                return;
+            }
+        } else {
+            setMessages(prev => [...prev, userMessage]);
+        }
+    
         setMessage("");
     
+        // Send message to AI and save the response
         try {
-            const response = await sendMessageToAI(message);
-            typeResponse(response);
+            const aiResponse = await sendMessageToAI(message);
+    
+            // Save user message and AI response to the database
+            await saveMessagesToDatabase(newConversationId, userMessage, { role: 'ai', content: aiResponse });
+    
+            // Type AI response gradually
+            typeResponse(aiResponse);
         } catch (error) {
             console.error('Error sending message to AI:', error);
         }
@@ -107,7 +230,7 @@ const PromptPage = () => {
             { speed: 6, duration: 5000 },
             { speed: 12, duration: 7000 },
             { speed: 18, duration: 6000 },
-            { speed: 26, duration: 8000 },
+            { speed: 35, duration: 3000 },
         ];
     
         let currentSpeed = typingSpeeds[0].speed;
@@ -115,7 +238,7 @@ const PromptPage = () => {
         let elapsed = 0;
     
         const initializeResponse = () => {
-            setConversation(prev => {
+            setMessages(prev => {
                 const newConversation = [...prev, { role: 'ai', content: '', typing: true }];
                 return newConversation;
             });
@@ -123,7 +246,7 @@ const PromptPage = () => {
     
         const typeNextChar = () => {
             if (index < response.length) {
-                setConversation(prev => {
+                setMessages(prev => {
                     const lastMessage = prev[prev.length - 1];
                     if (lastMessage && lastMessage.role === 'ai' && lastMessage.typing) {
                         const updatedMessage = { ...lastMessage, content: lastMessage.content + response.charAt(index) };
@@ -144,7 +267,7 @@ const PromptPage = () => {
     
                 setTimeout(typeNextChar, currentSpeed); // Schedule the next character
             } else {
-                setConversation(prev => {
+                setMessages(prev => {
                     const lastMessage = prev[prev.length - 1];
                     if (lastMessage && lastMessage.role === 'ai' && lastMessage.typing) {
                         const updatedMessage = { ...lastMessage, typing: false };
@@ -159,11 +282,58 @@ const PromptPage = () => {
         initializeResponse();
         setTimeout(() => typeNextChar(), 1000); // Introduce a 1-second delay before starting the typing
     };
+    
+    const saveMessagesToDatabase = async (conversationId, userMessage, aiMessage) => {
+        try {
+            let response;
+    
+            response = await fetch('https://lumen-0q0f.onrender.com/api/messages', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    conversationId: conversationId,
+                    role: userMessage.role,
+                    content: userMessage.content
+                })
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to save user message');
+            }
+    
+            response = await fetch('https://lumen-0q0f.onrender.com/api/messages', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    conversationId: conversationId,
+                    role: aiMessage.role,
+                    content: aiMessage.content
+                })
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to save AI message');
+            }
+    
+            const data = await response.json();
+            console.log('Messages saved:', data);
+        } catch (error) {
+            console.error('Error saving messages to the database:', error);
+            throw error;
+        }
+    };
 
     const handlePredictionSubmit = async () => {
         try {
             const response = await callPredictionAPI(message);
-            setConversation(prev => [...prev, { role: 'ai', content: response }]);
+            setCurrentConversation(prev => ({
+                ...prev,
+                messages: [...prev.messages, { role: 'ai', content: response }]
+            }));
         } catch (error) {
             console.error('Error calling the prediction API:', error);
         }
@@ -178,7 +348,6 @@ const PromptPage = () => {
                 },
                 body: JSON.stringify({ message })
             });
-
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -200,7 +369,11 @@ const PromptPage = () => {
         setLoading(false);
 
         console.log('API Response:', response);
-        setAiResponse(response);
+        setCurrentConversation(prev => ({
+            ...prev,
+            messages: [...prev.messages, { role: 'ai', content: response }]
+        }));
+        setMessages(prev => [...prev, { role: 'ai', content: response }]); // Add AI message to messages state
 
         setMessage('');
     };
@@ -211,7 +384,6 @@ const PromptPage = () => {
             handleSendMessage();
         }
     };
-
 
     return (
         <div className="prompt-container">
@@ -236,21 +408,12 @@ const PromptPage = () => {
                                 </Link>
                             </div>
                             <div className="dropdown-section">
-                                <div className="dropdown-heading">Today</div>
-                                <div className="dropdown-item">Chat 1</div>
-                            </div>
-                            <div className="dropdown-section">
-                                <div className="dropdown-heading">Yesterday</div>
-                                <div className="dropdown-item">Chat 2</div>
-                            </div>
-                            <div className="dropdown-section">
-                                <div className="dropdown-heading">Previous 7 Days</div>
-                                <div className="dropdown-item">Chat 3</div>
-                                <div className="dropdown-item">Chat 4</div>
-                            </div>
-                            <div className="dropdown-section">
-                                <div className="dropdown-heading">Previous 30 Days</div>
-                                <div className="dropdown-item">Chat 5</div>
+                                <div className="dropdown-heading">Conversations</div>
+                                {chatHistory.map(conv => (
+                                    <div key={conv.id} className="dropdown-item" onClick={() => handleConversationSelect(conv)}>
+                                        Conversation started at {new Date(conv.created_at).toLocaleString()}
+                                    </div>
+                                ))}
                             </div>
                             <div className="dropdown-section user-section">
                                 <div className="dropdown-item user-info" onClick={() => console.log('Redirect to settings')}>
@@ -322,32 +485,31 @@ const PromptPage = () => {
                 </div>
             </div>
             <div className={`chat-container ${conversationStarted ? 'active' : ''}`} ref={chatContainerRef}>
-            {conversation.map((msg, index) => (
-                <div key={index} className={`chat-message ${msg.role}`}>
-                    <div className={`message-bubble ${msg.role}`}>
-                        {msg.content}
+                {messages.map((msg, index) => (
+                    <div key={index} className={`chat-message ${msg.role}`}>
+                        <div className={`message-bubble ${msg.role}`}>
+                            {msg.content}
+                        </div>
                     </div>
-                </div>
-            ))}
-        </div>
-        <div className="message-input-container">
-            <textarea
-                className="message-input"
-                placeholder="Message Lumen"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                onKeyDown={handleKeyDown}
-                ref={textareaRef}
-            ></textarea>
-            <button className="submit-button" onClick={handleSendMessage}>
-                <i className="fa fa-arrow-up"></i>
-            </button>
-        </div>
+                ))}
+            </div>
+            <div className="message-input-container">
+                <textarea
+                    className="message-input"
+                    placeholder="Message Lumen"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    ref={textareaRef}
+                ></textarea>
+                <button className="submit-button" onClick={handleSendMessage}>
+                    <i className="fa fa-arrow-up"></i>
+                </button>
+            </div>
             <p className="disclaimer">
                 Lumen’s insights may vary. Always double-check before trading.
             </p>
         </div>
     );
 };
-
 export default PromptPage;
