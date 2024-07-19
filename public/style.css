@@ -20,7 +20,8 @@ body, html {
 /* Utilities: Navbar */
 .navbar {
     background-color: black;
-    padding: 10px 20px;
+    /* padding: 10px 20px; */
+    margin-bottom: -1rem;
     display: flex;
     justify-content: flex-start;
 }
@@ -34,12 +35,14 @@ body, html {
 .nav-item {
     margin-right: 20px;
     color: white;
+    opacity: 70%;
+    font-size: 1.1rem;
     text-decoration: none;
     cursor: pointer;
 }
 
 .nav-item:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 /* Home Page Styles */
@@ -49,7 +52,7 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: black;
+    background-color: black; 
     overflow: hidden;
 }
 
@@ -65,11 +68,12 @@ body, html {
     position: relative;
     text-align: center;
     z-index: 1;
-    top: -80px; /* Move the text upwards */
+    top: -0rem; /* Move the text upwards */
 }
 
 .lumen-title {
     font-size: 15rem;
+    margin-top: -2rem;
     color: rgba(0, 0, 0, 0); /* Make the inner part completely transparent */
     position: relative;
     z-index: 1;
@@ -111,7 +115,8 @@ body, html {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 18rem;
+    /* padding-top: 2rem; */
 }
 
 /* Home Button */
@@ -165,6 +170,7 @@ body, html {
 /* Access Key Note */
 .access-key-note {
     margin-top: 10px;
+    margin-bottom: 2rem;
     font-size: 1rem;
     color: white;
     opacity: 0.5;
@@ -503,8 +509,7 @@ body, html {
     color: white;
     height: 100vh; /* Ensure it takes full viewport height */
     position: relative;
-    justify-content: space-between; 
-    padding: 2rem; 
+    padding: 0; /* Remove padding */
     box-sizing: border-box; 
     overflow: hidden; /* Prevent scrolling */
 }
@@ -519,8 +524,9 @@ body, html {
     background-color: #121212; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     z-index: 1000;
+    height: 60px; /* Add a fixed height */
 }
-  
+
 .navbar-left, .navbar-center, .navbar-right {
     display: flex;
     align-items: center;
@@ -612,7 +618,7 @@ body, html {
     height: 30px;
     border-radius: 50%;
     margin-right: 10px;
-    object-fit: cover; /* Ensure the image covers the container without distortion */
+    object-fit: cover; 
 
 }
 
@@ -779,6 +785,87 @@ body, html {
     opacity: 65%;
 }
 
+/* Chat Container */
+.prompt-navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: #121212; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    height: 60px; /* Add a fixed height */
+}
+
+/* Chat Container */
+.chat-container {
+    position: absolute;
+    top: 60px; /* Directly below the navbar */
+    bottom: 15rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 20px;
+    background-color: #121212; /* Adjust to match your theme */
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease; /* Smooth transition */
+    z-index: 1; /* Ensure it is above other elements */
+}
+
+.chat-container.active {
+    opacity: 1;
+}
+
+.chat-message {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    width: 100%; 
+}
+
+.chat-message.user {
+    justify-content: flex-end;
+    align-self: flex-end;
+}
+
+.chat-message.ai {
+    justify-content: flex-start;
+    align-self: flex-start; 
+}
+
+.message-bubble {
+    max-width: 60%;
+    padding: 10px 15px;
+    border-radius: 20px;
+    background-color: #333; 
+    color: #fff;
+    display: inline-block; 
+    font-size: 1.4rem; 
+    line-height: 1.6;  
+    text-align: left; /* Ensure text is left-aligned */
+    word-wrap: break-word; /* Ensure long words are wrapped to the next line */
+    overflow-wrap: break-word; /* Ensure long words are wrapped to the next line */
+}
+
+.message-bubble.user {
+    background-color: #d27300; /* User message color */
+    font-size: 1.4rem;
+    line-height: 1.6; 
+
+}
+
+.message-bubble.ai {
+    background-color: #444; /* AI message color */
+    font-size: 1.4rem; 
+    line-height: 1.6;  
+
+}
+
 /* Common Tooltip Styles */
 .tooltip {
     position: absolute;
@@ -818,6 +905,27 @@ body, html {
     padding: 0 1rem; 
     padding-left: 3rem;
     flex-grow: 1; /* Allow intro section to grow and fill available space */
+    transition: opacity 0.3s ease; /* Smooth transition */
+    opacity: 1;
+    z-index: 2; /* Ensure it is above the chat container */
+}
+
+.intro.hidden {
+    opacity: 0;
+    z-index: 0; /* Ensure it goes below the chat container */
+}
+
+
+/* Greeting */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .greeting {
@@ -828,12 +936,21 @@ body, html {
     -webkit-background-clip: text;
     color: transparent;
     -webkit-text-fill-color: transparent;
+    padding: 0 2rem; /* Add padding to the left and right */
+    opacity: 0; /* Initially hidden */
+    animation: fadeIn 0.6s ease-in-out forwards; /* Apply fade-in animation */
+    animation-delay: 0.3s; /* Delay the animation by 0.5s */
 }
 
 .help {
     font-size: 3rem; /* Increased font size */
     margin: 0;
     color: rgba(170, 170, 170, 0.45); /* Grey color for the bottom line */
+    padding: 0 2rem; /* Add padding to the left and right */
+    opacity: 0; /* Initially hidden */
+    animation: fadeIn 0.6s ease-in-out forwards; /* Apply fade-in animation */
+    animation-delay: 0.3s; /* Delay the animation by 0.5s */
+
 }
 
 /* Example Prompts */
@@ -843,10 +960,11 @@ body, html {
     flex-wrap: wrap;
     gap: 1rem;
     margin-top: 3rem; /* Pushes the example prompts down */
+    padding: 0 2rem; /* Add padding to the left and right */
 }
 
 .example-prompt {
-    background-color: #1a1a1a;
+    background-color: #1a1a1a; 
     padding: 1rem 2rem;
     border-radius: 1rem;
     cursor: pointer;
@@ -865,18 +983,23 @@ body, html {
     align-items: center;
     width: 100%;
     max-width: 850px;
-    position: relative;
+    position: fixed; /* Change to fixed positioning */
+    bottom: 0; /* Align to the bottom */
     box-sizing: border-box;
     flex-shrink: 0; 
-    margin-bottom: 0rem; /* Ensure some spacing from the bottom */
+    padding: 1rem; /* Add some padding for better spacing */
+    bottom: 5rem;
+    background-color: #121212; /* Ensure it matches the background */
+    z-index: 3; /* Ensure it is above the chat container */
 }
 
+/* message bubble */
 .message-input {
     flex: 1;
     padding: 1.5rem 2rem;
     border: none;
     border-radius: 3rem;
-    background-color: #393939;
+    background-color: #393939; 
     font-family: Arial, Helvetica, sans-serif;
     font-size: 1.1rem; 
     color: rgba(255, 255, 255, 1);
@@ -904,7 +1027,7 @@ body, html {
 
 .submit-button {
     position: absolute;
-    right: 15px;
+    right: 30px;
     background-color: #676767;
     border: none;
     border-radius: 50%;
@@ -928,9 +1051,13 @@ body, html {
 }
 
 .disclaimer {
-    font-size: 0.9rem;
+    position: fixed;
+    bottom: 2rem;
+    width: 100%;
+    font-size: 1rem;
     color: #aaa;
-    text-align: center; 
-    padding-bottom: 0rem; 
-    flex-shrink: 0;
+    text-align: center;
+    padding-bottom: 0.5rem;
+    background-color: #121212;
+    z-index: 2;
 }
