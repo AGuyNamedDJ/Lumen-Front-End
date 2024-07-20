@@ -51,7 +51,7 @@ const HomePage = () => {
           <Link to="/login">
             <button className="home-button home-sign-in-button">Sign In</button>
           </Link>
-          <Link to="/learn-more">
+          <Link to="/about-us">
             <button className="home-button learn-more-button">Learn More</button>
           </Link>
         </div>
