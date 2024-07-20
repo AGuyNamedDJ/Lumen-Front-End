@@ -83,7 +83,7 @@ body, html {
     display: flex;
     flex-direction: column;
     margin-right: 20px;
-    line-height: 2rem; /* Increases line height for better spacing */
+    line-height: 2rem; 
 }
 
 .nav-item .dropdown-column h3 {
@@ -113,6 +113,23 @@ body, html {
 .nav-item:hover .dropdown-menu,
 .nav-item.active .dropdown-menu {
     display: flex;
+}
+
+/* Utilities: Under Development */
+.under-development {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh; 
+    background-color: black;
+    color: white;
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 20px;
+}
+
+.under-development p {
+    margin: 0;
 }
 
 /* Home Page Styles */
@@ -154,7 +171,7 @@ body, html {
 .letter {
     position: relative;
     display: inline-block;
-    -webkit-text-stroke: 2px rgba(255, 165, 0, 0.15); /* Slightly visible bronze outline */
+    -webkit-text-stroke: 2px rgba(255, 165, 0, 0.15); 
     color: transparent; /* Transparent interior */
     transition: -webkit-text-stroke 0.1s ease, clip-path 0.1s ease;
 }
@@ -193,9 +210,9 @@ body, html {
 .home-button {
     margin-top: 1px;
     margin-bottom: 15px;
-    padding: 12px 80px; /* Adjusted padding */
+    padding: 12px 80px; 
     font-size: 1.2rem;
-    border-radius: 1.2rem; /* Updated border radius */
+    border-radius: 1.2rem; 
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s, transform 0.3s ease;
     display: inline-flex;
@@ -208,7 +225,7 @@ body, html {
 /* First child - Sign In */
 .button-container a:first-child .home-button {
     background: linear-gradient(to right, hwb(33 22% 1%), #d35a04); /* Gradient color */
-    color: white; /* White text */
+    color: white; 
     opacity: 85%;
 }
 
@@ -267,7 +284,7 @@ body, html {
     width: 90%;
     height: 35%;
     max-width: 40%;
-    border-radius: 1rem; /* Rounded corners for the mini window */
+    border-radius: 1rem; 
 }
 
 .close-button {
@@ -336,7 +353,7 @@ body, html {
     outline: none; /* Remove default outline */
     box-shadow: 0 0 0 4px #ff8c00; 
     background-clip: padding-box;
-    border-radius: 0.25rem; /* Ensure this matches the border-radius of the input field */
+    border-radius: 0.25rem; 
 }
 
 .sign-in-button-next {
@@ -387,7 +404,7 @@ body, html {
     content: '';
     border-bottom: 1px solid #aaa;
     flex: 1;
-    margin: 0 90px; /* Add margin to decrease the width of the divider lines */
+    margin: 0 90px; 
 }
 
 .divider::before {
@@ -426,7 +443,7 @@ body, html {
 }
 
 .signup-box {
-    position: relative; /* Add position relative to position the close button */
+    position: relative; 
     background-color: #000;
     padding: 2rem;
     border-radius: 0.5rem;
@@ -434,7 +451,7 @@ body, html {
     text-align: center;
     width: 90%;
     max-width: 40%;
-    border-radius: 1rem; /* Rounded corners for the mini window */
+    border-radius: 1rem; 
 }
 
 .signup-close-button {
@@ -464,7 +481,7 @@ body, html {
     display: block;
     width: 60%;
     padding: 0.70rem;
-    margin: 1rem auto; /* Center buttons */
+    margin: 1rem auto; 
     border-radius: 1rem;
     font-size: 1rem;
     border: none;
@@ -487,8 +504,8 @@ body, html {
 .signup-input-field {
     width: 55%; 
     padding: 0.75rem;
-    margin: 0.75rem auto; /* Center text box */
-    border-radius: 0.25rem; /* Square corners for text box */
+    margin: 0.75rem auto; 
+    border-radius: 0.25rem; 
     border: 1px solid #555;
     background-color: black;
     color: white; 
@@ -503,7 +520,7 @@ body, html {
     outline: none; 
     box-shadow: 0 0 0 4px #ff8c00; 
     background-clip: padding-box;
-    border-radius: 0.25rem; /* Ensure this matches the border-radius of the input field */
+    border-radius: 0.25rem; 
 }
 
 .signup-button-next {
@@ -525,7 +542,7 @@ body, html {
     content: '';
     border-bottom: 1px solid #aaa;
     flex: 1;
-    margin: 0 90px; /* Add margin to decrease the width of the divider lines */
+    margin: 0 90px; 
 }
 
 .signup-divider::before {
@@ -577,9 +594,9 @@ body, html {
     align-items: center;
     background-color: #121212;
     color: white;
-    height: 100vh; /* Ensure it takes full viewport height */
+    height: 100vh; 
     position: relative;
-    padding: 0; /* Remove padding */
+    padding: 0; 
     box-sizing: border-box; 
     overflow: hidden; /* Prevent scrolling */
 }
@@ -606,7 +623,7 @@ body, html {
     background: none;
     border: none;
     color: white;
-    font-size: 1.5rem; /* Increase the icon size */
+    font-size: 1.5rem; 
     cursor: pointer;
     padding: 0.5rem 1rem;
     opacity: 60%;
@@ -660,17 +677,17 @@ body, html {
 
 .dropdown-item i {
     margin-right: 0.5rem; /* Space between the icon and text */
-    font-size: 1.6rem; /* Adjust icon size if necessary */
+    font-size: 1.6rem; 
 }
 
 .dropdown-item:hover {
     background-color: rgba(255, 255, 255, 0.176);
-    border-radius: 0.5rem; /* Add border radius */
+    border-radius: 0.5rem;
     transition: background-color 0.1s, border-radius 0.1s; /* Ensure smooth transition */
 }
 
 .dropdown-section:first-of-type {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Adjust the color and opacity as needed */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
     padding-bottom: 0.5rem; /* Space below the border */
     padding-top: o.5rem;
     margin-bottom: 0.5rem; /* Space below the section */
@@ -693,8 +710,8 @@ body, html {
 }
 
 .home-link-text {
-    font-size: 1.2rem; /* Adjust as needed */
-    margin-left: 0.5rem; /* Space between the icon and the text */
+    font-size: 1.2rem;
+    margin-left: 0.5rem; 
 }
 
 .backdrop {
@@ -712,7 +729,7 @@ body, html {
     border-top: 1px solid rgba(255, 255, 255, 0.1); /* Add a top border to separate the user section */
     position: absolute;
     bottom: 1rem;
-    width: 100%; /* Ensure it takes full width of the sidebar */
+    width: 100%; 
 }
 
 .user-info {
@@ -754,7 +771,7 @@ body, html {
 
 .model-select:hover {
     background-color: rgba(255, 255, 255, 0.176); /* Brighter color on hover */
-    border-radius: 0.8rem; /* Add some border radius for rounded corners */
+    border-radius: 0.8rem; 
 }
 
 .model-dropdown {
@@ -763,7 +780,7 @@ body, html {
     left: 50%;
     transform: translateX(-50%);
     background-color: #323232;
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Thin white border with slight opacity */
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
     padding: 1rem;
@@ -818,7 +835,7 @@ body, html {
 .model-item div {
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Align items to the start */
+    align-items: flex-start;
 }
 
 .model-name {
@@ -847,7 +864,7 @@ body, html {
     font-size: 1.5rem;
     cursor: pointer;
     padding: 0.5rem 1rem;
-    margin-left: -15%; /* Adjust to move the emblem left */
+    margin-left: -15%; /* emblem left */
 }
 
 .new-message-button i {
@@ -880,7 +897,7 @@ body, html {
     flex-direction: column;
     overflow-y: auto; /* Enable vertical scrolling */
     padding: 20px;
-    background-color: #121212; /* Adjust to match your theme */
+    background-color: #121212; 
     border-radius: 10px;
     opacity: 0;
     transition: opacity 0.3s ease; /* Smooth transition */
@@ -917,9 +934,9 @@ body, html {
     display: inline-block; 
     font-size: 1.4rem; 
     line-height: 1.6;  
-    text-align: left; /* Ensure text is left-aligned */
-    word-wrap: break-word; /* Ensure long words are wrapped to the next line */
-    overflow-wrap: break-word; /* Ensure long words are wrapped to the next line */
+    text-align: left; 
+    word-wrap: break-word; 
+    overflow-wrap: break-word; 
 }
 
 .message-bubble.user {
@@ -964,7 +981,7 @@ body, html {
     opacity: 1;
     top: 90%;
     left: 0; 
-    transform: translateX(0); /* No translation needed */
+    transform: translateX(0); 
     margin-left: 1.5rem; 
 }
 
@@ -974,7 +991,7 @@ body, html {
     width: 100%; 
     padding: 0 1rem; 
     padding-left: 3rem;
-    flex-grow: 1; /* Allow intro section to grow and fill available space */
+    flex-grow: 1;
     transition: opacity 0.3s ease; /* Smooth transition */
     opacity: 1;
     z-index: 2; /* Ensure it is above the chat container */
@@ -999,7 +1016,7 @@ body, html {
 }
 
 .greeting {
-    font-size: 3.5rem; /* Increased font size */
+    font-size: 3.5rem; 
     margin: 0;
     background: linear-gradient(to right, hwb(33 22% 1%), #d3049f); /* Gradient color */
     background-clip: text;
@@ -1039,7 +1056,7 @@ body, html {
     border-radius: 1rem;
     cursor: pointer;
     transition: background-color 0.3s;
-    font-size: 1.2rem; /* Increased font size */
+    font-size: 1.2rem;
     border: 1px solid rgba(255, 255, 255, 0.1); /* Thin white border with slight opacity */
 }
 
@@ -1053,13 +1070,13 @@ body, html {
     align-items: center;
     width: 100%;
     max-width: 850px;
-    position: fixed; /* Change to fixed positioning */
-    bottom: 0; /* Align to the bottom */
+    position: fixed;
+    bottom: 0; 
     box-sizing: border-box;
     flex-shrink: 0; 
-    padding: 1rem; /* Add some padding for better spacing */
+    padding: 1rem; 
     bottom: 5rem;
-    background-color: #121212; /* Ensure it matches the background */
+    background-color: #121212;
     z-index: 3; /* Ensure it is above the chat container */
 }
 
@@ -1089,7 +1106,7 @@ body, html {
 
 /* Add gradient border on focus */
 .message-input:focus {
-    outline: none; /* Remove default outline */
+    outline: none; 
     box-shadow: 0 0 0 4px #ff8c00; 
     background-clip: padding-box;
     border-radius: 3rem; 
