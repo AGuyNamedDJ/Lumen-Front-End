@@ -14,7 +14,7 @@ const footer = () => {
     <div class="footer-column">
       <h3>Research</h3>
       <ul>
-        <li><a href="/research-overview">Overview</a></li>
+        <li><a href="/overview/">Research Overview</a></li>
         <li><a href="/publications">Publications</a></li>
         <li><a href="/datasets">Datasets</a></li>
         <li><a href="/latest-advancements">Latest Advancements</a></li>
@@ -25,13 +25,12 @@ const footer = () => {
       <ul>
         <li><a href="/about-us">About Us</a></li>
         <li><a href="/contact">Contact Us</a></li>
-        <li><a href="/security-privacy">Security & Privacy</a></li>
       </ul>
     </div>
     <div class="footer-column">
       <h3>Products & Services</h3>
       <ul>
-        <li><a href="/product-overview">Product Overview</a></li>
+        <li><a href="/overview-product">Product Overview</a></li>
         <li><a href="/pricing">Pricing</a></li>
         <li><a href="/how-to-guides">How-To Guides</a></li>
       </ul>
@@ -48,7 +47,7 @@ const footer = () => {
     <div class="footer-column">
       <h3>Trust & Safety</h3>
       <ul>
-        <li><a href="/safety-overview">Safety Overview</a></li>
+        <li><a href="/overview-safety">Safety Overview</a></li>
         <li><a href="/safety-standards">Safety Standards</a></li>
         <li><a href="/responsible-use">Responsible Use Guide</a></li>
         <li><a href="/security">Security</a></li>
@@ -58,9 +57,9 @@ const footer = () => {
       <h3>Legal</h3>
       <ul>
         <li><a href="/terms-of-use">Terms of Use</a></li>
-        <li><a href="/privacy-policy">Privacy Policy</a></li>
-        <li><a href="/cookies-policy">Cookies Policy</a></li>
-        <li><a href="/other-policies">Other Policies</a></li>
+        <li><a href="/security-privacy">Security & Privacy</a></li>
+        <li><a href="/policy-cookies">Cookies Policy</a></li>
+        <li><a href="/policy-other">Other Policies</a></li>
       </ul>
     </div>
   </div>

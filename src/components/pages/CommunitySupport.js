@@ -1,6 +1,6 @@
 import React from "react";
 
-const News = () => {
+const CommunitySupport = () => {
     return(
         <div className="under-development">
             <p>This webpage is currently under development.</p>
@@ -8,4 +8,4 @@ const News = () => {
     );
 };
 
-export default News;
+export default CommunitySupport;
