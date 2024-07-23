@@ -341,7 +341,7 @@ const PromptPage = () => {
 
     const callPredictionAPI = async (message) => {
         try {
-            const response = await fetch('http://localhost:8000/conversation', {
+            const response = await fetch('https://lumen-0q0f.onrender.com/api/conversation', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

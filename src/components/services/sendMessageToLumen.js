@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const sendMessageToAI = async (message) => {
     try {
-        const response = await axios.post('http://localhost:8000/conversation', {
+        const response = await axios.post('https://lumen-back-end-flask.onrender.com/conversation', {
             message: message,
         });
         return response.data.response;

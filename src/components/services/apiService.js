@@ -6,6 +6,7 @@ const API_URL = 'https://lumen-0q0f.onrender.com';
 // http://localhost:8000
 // https://lumen-0q0f.onrender.com
 // https://lumen-0q0f.onrender.com/api/user/me
+// https://lumen-back-end-flask.onrender.com 
 
 // Function to get the token from localStorage
 const getAuthToken = () => {
@@ -16,7 +17,7 @@ export const sendMessageToAI = async (message) => {
   try {
       console.log("Attempting to communicate with OpenAI ...");
       // const response = await axios.post(`${API_URL}/conversation`, { message });
-      const response = await axios.post(`http://localhost:5001/conversation`, { message });
+      const response = await axios.post(`https://lumen-back-end-flask.onrender.com/conversation`, { message });
       return response.data.response;
   } catch (error) {
       console.error('Error sending message to AI:', error);
