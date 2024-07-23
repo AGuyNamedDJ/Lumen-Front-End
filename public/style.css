@@ -5,7 +5,7 @@ body, html {
     font-family: Arial, sans-serif;
     background-color: black;
     color: white;
-    overflow: hidden; /* Prevent scrolling */
+    overflow: auto; /* Prevent scrolling */
 }
 
 /* Utilities */
@@ -15,16 +15,114 @@ body, html {
     color: white;
     text-align: center;
     padding: 1rem 0;
-    position: absolute;
+    position: relative;
+    bottom: 0;
     width: 100%;
-    bottom: 3%;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 2rem 5%;
+}
+
+.footer-column {
+    flex: 1 1 200px; /* Grow to fit available space, with minimum width */
+    margin: 0.5rem 1rem;
+}
+
+.footer-column h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: #ff8c00; /* Bronze color for headings */
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-column ul li a {
+    color: rgba(255, 255, 255, 0.7); 
+    text-decoration: none;
+    transition: color 0.3s, opacity 0.3s;
+    font-size: 1rem; 
+}
+
+.footer-column ul li a:hover {
+    color: #ff8c00; /* Bronze color on hover */
+}
+
+.footer-column ul li a:active {
+    opacity: 0.5; /* Reduce opacity on click */
+}
+
+.footer-bottom-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 2rem 5%;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-bottom-column {
+    flex: 1 1 200px; /* Grow to fit available space, with minimum width */
+    margin: 0.5rem 1rem;
+}
+
+.footer-bottom-column h3 {
+    font-size: 1rem; 
+    margin-bottom: 1rem;
+    color: #ff8c00; 
+}
+
+.footer-bottom-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-bottom-column ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-bottom-column ul li a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: color 0.3s, opacity 0.3s;
+    font-size: 1rem;
+}
+
+.footer-bottom-column ul li a:hover {
+    color: #ff8c00; /* Bronze color on hover */
+}
+
+.footer-bottom-column ul li a:active {
+    opacity: 0.5; /* Reduce opacity on click */
+}
+
+.footer-bottom {
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.footer-bottom p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 /* Utilities: Navbar */
 .navbar {
     background-color: black;
     padding: 0rem 0rem;
-    margin-top: 1.3rem; /* Pushes the navbar down */
+    margin-top: 1.3rem; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -76,7 +174,7 @@ body, html {
     padding: 20px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
-    min-width: 70vw; /* Adjusted to be wider */
+    min-width: 70vw; 
     width: auto;
     display: flex;
     justify-content: space-between;
@@ -89,22 +187,22 @@ body, html {
     margin-right: 20px;
     line-height: 2rem; 
     flex: 1; /* Ensures columns take equal space */
-    min-width: 200px; /* Ensures columns do not get too narrow */
+    min-width: 200px; 
 }
 
 .nav-item .dropdown-column h3 {
     color: #aaa;
     opacity: 80%;
-    font-size: 1rem; /* Adjust font size if necessary */
+    font-size: 1rem; 
     margin-bottom: 10px;
-    white-space: nowrap; /* Prevents wrapping */
+    white-space: nowrap; 
 }
 
 .nav-item .dropdown-column a {
     color: white;
     text-decoration: none;
     font-size: 1rem;
-    margin-bottom: 1rem; /* Adds more spacing between items */
+    margin-bottom: 1rem;
     transition: color 0.3s, transform 0.3s;
 }
 
@@ -162,7 +260,7 @@ body, html {
     position: relative;
     text-align: center;
     z-index: 1;
-    top: 0rem; /* Move the text upwards */
+    top: 0rem; 
 }
 
 .lumen-title {
@@ -215,10 +313,10 @@ body, html {
 
 /* Home Button */
 .home-button {
-    margin: 0.5rem 0; /* Adjust vertical margin as needed */
-    padding: 1rem 4rem; /* Adjust padding as needed */
-    font-size: 1rem; /* Adjust font size as needed */
-    border-radius: 1.5rem; /* Adjust border-radius as needed */
+    margin: 0.5rem 0; 
+    padding: 1rem 4rem; 
+    font-size: 1rem; 
+    border-radius: 1.5rem; 
     font-size: 1.2rem;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s, transform 0.3s ease;
@@ -271,7 +369,6 @@ body, html {
 }
 
 /* CSS for Login Page */
-/* General Styles */
 .login-container {
     height: 100vh;
     display: flex;
@@ -282,7 +379,7 @@ body, html {
 }
 
 .login-box {
-    position: relative; /* Add position relative to position the close button */
+    position: relative;
     background-color: #000;
     padding: 2rem;
     border-radius: 0.5rem;
