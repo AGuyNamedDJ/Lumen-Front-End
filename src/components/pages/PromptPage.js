@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 import { useUser } from '../utilities/UserContext';
-import { sendMessageToAI, fetchChatHistoryAPI, fetchMessagesAPI } from '../services/apiService';
+import { sendMessageToAI, fetchChatHistoryAPI, fetchMessagesAPI, saveMessagesToDatabase } from '../services/apiService';
 
 const PromptPage = () => {
     const user = useUser();
@@ -10,16 +10,16 @@ const PromptPage = () => {
     const [showMenuTooltip, setShowMenuTooltip] = useState(false);
     const [modelDropdownOpen, setModelDropdownOpen] = useState(false);
     const [selectedModel, setSelectedModel] = useState("Lumen-1");
-    const [message, setMessage] = useState(""); 
-    const [messages, setMessages] = useState([]); 
-    const [chatHistory, setChatHistory] = useState([]); 
+    const [message, setMessage] = useState("");
+    const [messages, setMessages] = useState([]);
+    const [chatHistory, setChatHistory] = useState([]);
     const [conversationStarted, setConversationStarted] = useState(false);
     const [currentConversation, setCurrentConversation] = useState(null);
-    const [currentConversationId, setCurrentConversationId] = useState(null); 
-    const [loading, setLoading] = useState(false); 
+    const [currentConversationId, setCurrentConversationId] = useState(null);
+    const [loading, setLoading] = useState(false);
     const modelDropdownRef = useRef(null);
     const menuDropdownRef = useRef(null);
-    const menuButtonRef = useRef(null); 
+    const menuButtonRef = useRef(null);
     const textareaRef = useRef(null);
     const chatContainerRef = useRef(null);
 
@@ -41,20 +41,20 @@ const PromptPage = () => {
             setModelDropdownOpen(false);
         }
         if (
-            menuDropdownRef.current && 
+            menuDropdownRef.current &&
             !menuDropdownRef.current.contains(event.target) &&
             menuButtonRef.current &&
             !menuButtonRef.current.contains(event.target)
         ) {
             setTimeout(() => {
                 setMenuOpen(false);
-            }, 150); 
+            }, 150);
         }
     };
 
     const fetchChatHistoryData = async (userId) => {
         try {
-            const response = await fetchChatHistoryAPI(userId); 
+            const response = await fetchChatHistoryAPI(userId);
             console.log('Fetched chat history:', response);
             return response;
         } catch (error) {
@@ -65,7 +65,7 @@ const PromptPage = () => {
 
     const fetchMessages = async (conversationId) => {
         try {
-            const messages = await fetchMessagesAPI(conversationId); 
+            const messages = await fetchMessagesAPI(conversationId);
             console.log('Fetched messages:', messages);
             return messages;
         } catch (error) {
@@ -99,7 +99,7 @@ const PromptPage = () => {
 
                     if (Array.isArray(chatHistory) && chatHistory.length > 0) {
                         const uniqueConversations = chatHistory.filter(
-                            (value, index, self) => 
+                            (value, index, self) =>
                                 index === self.findIndex((t) => t.id === value.id)
                         );
 
@@ -123,7 +123,7 @@ const PromptPage = () => {
                 }
             }
         };
-    
+
         fetchHistoryAndMessages();
     }, [user]);
 
@@ -137,7 +137,7 @@ const PromptPage = () => {
         setCurrentConversation(conversation);
         try {
             const fetchedMessages = await fetchMessagesAPI(conversation.id);
-            setMessages(fetchedMessages); 
+            setMessages(fetchedMessages);
         } catch (error) {
             console.error('Error fetching messages:', error);
         }
@@ -145,23 +145,23 @@ const PromptPage = () => {
 
     const handleImageError = (e) => {
         console.error("Image failed to load:", e.target.src);
-        e.target.onerror = null; 
+        e.target.onerror = null;
         e.target.src = "path/to/default-profile-picture";
     };
 
     const handleExampleClick = async (prompt) => {
         setMessage(prompt);
-    
+
         // Clear previous conversation and messages
         setCurrentConversation(null);
         setCurrentConversationId(null);
         setMessages([]);
         setConversationStarted(false);
-    
+
         // Set the new prompt as a message
         setTimeout(() => handleSendMessage(), 100);
     };
-    
+
     const handleSendMessage = async () => {
         if (message.trim() === "") return;
     
@@ -210,287 +210,192 @@ const PromptPage = () => {
     
         setMessage("");
     
-        // Send message to AI and save the response
+        // Send the message to the backend and handle the response
         try {
             const aiResponse = await sendMessageToAI(message);
     
             // Save user message and AI response to the database
-            await saveMessagesToDatabase(newConversationId, userMessage, { role: 'ai', content: aiResponse });
+            await saveMessagesToDatabase(newConversationId, userMessage, { role: 'ai', content: aiResponse.response });
     
             // Type AI response gradually
-            typeResponse(aiResponse);
+            typeResponse(aiResponse.response);
         } catch (error) {
             console.error('Error sending message to AI:', error);
         }
     };
+        
+const typeResponse = (response) => {
+    let index = -1; // Start from the first character
+    const typingSpeeds = [
+        { speed: 6, duration: 5000 },
+        { speed: 12, duration: 7000 },
+        { speed: 18, duration: 6000 },
+        { speed: 35, duration: 3000 },
+    ];
 
-    const typeResponse = (response) => {
-        let index = -1; // Start from the first character
-        const typingSpeeds = [
-            { speed: 6, duration: 5000 },
-            { speed: 12, duration: 7000 },
-            { speed: 18, duration: 6000 },
-            { speed: 35, duration: 3000 },
-        ];
-    
-        let currentSpeed = typingSpeeds[0].speed;
-        let currentDuration = typingSpeeds[0].duration;
-        let elapsed = 0;
-    
-        const initializeResponse = () => {
+    let currentSpeed = typingSpeeds[0].speed;
+    let currentDuration = typingSpeeds[0].duration;
+    let elapsed = 0;
+
+    const initializeResponse = () => {
+        setMessages(prev => {
+            const newConversation = [...prev, { role: 'ai', content: '', typing: true }];
+            return newConversation;
+        });
+    };
+
+    const typeNextChar = () => {
+        if (index < response.length) {
             setMessages(prev => {
-                const newConversation = [...prev, { role: 'ai', content: '', typing: true }];
-                return newConversation;
-            });
-        };
-    
-        const typeNextChar = () => {
-            if (index < response.length) {
-                setMessages(prev => {
-                    const lastMessage = prev[prev.length - 1];
-                    if (lastMessage && lastMessage.role === 'ai' && lastMessage.typing) {
-                        const updatedMessage = { ...lastMessage, content: lastMessage.content + response.charAt(index) };
-                        const newConversation = [...prev.slice(0, prev.length - 1), updatedMessage];
-                        return newConversation;
-                    }
-                    return prev;
-                });
-                index++;
-                elapsed += currentSpeed;
-    
-                if (elapsed >= currentDuration) {
-                    const nextTypingSpeed = typingSpeeds[Math.floor(Math.random() * typingSpeeds.length)];
-                    currentSpeed = nextTypingSpeed.speed;
-                    currentDuration = nextTypingSpeed.duration;
-                    elapsed = 0;
+                const lastMessage = prev[prev.length - 1];
+                if (lastMessage && lastMessage.role === 'ai' && lastMessage.typing) {
+                    const updatedMessage = { ...lastMessage, content: lastMessage.content + response.charAt(index) };
+                    const newConversation = [...prev.slice(0, prev.length - 1), updatedMessage];
+                    return newConversation;
                 }
-    
-                setTimeout(typeNextChar, currentSpeed); // Schedule the next character
-            } else {
-                setMessages(prev => {
-                    const lastMessage = prev[prev.length - 1];
-                    if (lastMessage && lastMessage.role === 'ai' && lastMessage.typing) {
-                        const updatedMessage = { ...lastMessage, typing: false };
-                        const newConversation = [...prev.slice(0, prev.length - 1), updatedMessage];
-                        return newConversation;
-                    }
-                    return prev;
-                });
-            }
-        };
-    
-        initializeResponse();
-        setTimeout(() => typeNextChar(), 1000); // Introduce a 1-second delay before starting the typing
-    };
-    
-    const saveMessagesToDatabase = async (conversationId, userMessage, aiMessage) => {
-        try {
-            let response;
-    
-            response = await fetch('https://lumen-0q0f.onrender.com/api/messages', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    conversationId: conversationId,
-                    role: userMessage.role,
-                    content: userMessage.content
-                })
+                return prev;
             });
-    
-            if (!response.ok) {
-                throw new Error('Failed to save user message');
+            index++;
+            elapsed += currentSpeed;
+
+            if (elapsed >= currentDuration) {
+                const nextTypingSpeed = typingSpeeds[Math.floor(Math.random() * typingSpeeds.length)];
+                currentSpeed = nextTypingSpeed.speed;
+                currentDuration = nextTypingSpeed.duration;
+                elapsed = 0;
             }
-    
-            response = await fetch('https://lumen-0q0f.onrender.com/api/messages', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    conversationId: conversationId,
-                    role: aiMessage.role,
-                    content: aiMessage.content
-                })
+
+            setTimeout(typeNextChar, currentSpeed); // Schedule the next character
+        } else {
+            setMessages(prev => {
+                const lastMessage = prev[prev.length - 1];
+                if (lastMessage && lastMessage.role === 'ai' && lastMessage.typing) {
+                    const updatedMessage = { ...lastMessage, typing: false };
+                    const newConversation = [...prev.slice(0, prev.length - 1), updatedMessage];
+                    return newConversation;
+                }
+                return prev;
             });
-    
-            if (!response.ok) {
-                throw new Error('Failed to save AI message');
-            }
-    
-            const data = await response.json();
-            console.log('Messages saved:', data);
-        } catch (error) {
-            console.error('Error saving messages to the database:', error);
-            throw error;
         }
     };
 
-    const handlePredictionSubmit = async () => {
-        try {
-            const response = await callPredictionAPI(message);
-            setCurrentConversation(prev => ({
-                ...prev,
-                messages: [...prev.messages, { role: 'ai', content: response }]
-            }));
-        } catch (error) {
-            console.error('Error calling the prediction API:', error);
-        }
-    };
+    initializeResponse();
+    setTimeout(() => typeNextChar(), 1000); // Introduce a 1-second delay before starting the typing
+};
 
-    const callPredictionAPI = async (message) => {
-        try {
-            const response = await fetch('https://lumen-0q0f.onrender.com/api/conversation', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ message })
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const data = await response.json();
-            return data.response;
-        } catch (error) {
-            console.error('Error calling the prediction API:', error);
-            return 'Error occurred while fetching prediction';
-        }
-    };
-
-    const handleSubmit = async (e) => {
+const handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
-        if (!message.trim()) return;
+        handleSendMessage();
+    }
+};
 
-        setLoading(true);
-        const response = await callPredictionAPI(message);
-        setLoading(false);
-
-        console.log('API Response:', response);
-        setCurrentConversation(prev => ({
-            ...prev,
-            messages: [...prev.messages, { role: 'ai', content: response }]
-        }));
-        setMessages(prev => [...prev, { role: 'ai', content: response }]); // Add AI message to messages state
-
-        setMessage('');
-    };
-
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSendMessage();
-        }
-    };
-
-    return (
-        <div className="prompt-container">
-            <nav className="prompt-navbar">
-                <div className="navbar-left">
-                    <button
-                        className="navbar-dropdown"
-                        onClick={toggleMenu}
-                        onMouseEnter={() => setShowMenuTooltip(true)}
-                        onMouseLeave={() => setShowMenuTooltip(false)}
-                        ref={menuButtonRef}
-                    >
-                        <i className="fas fa-bars-staggered"></i>
-                        {showMenuTooltip && <div className="tooltip menu-tooltip">Expand menu</div>}
-                    </button>
-                    {menuOpen && (
-                        <div className="left-dropdown-menu" ref={menuDropdownRef}>
-                            <div className="dropdown-section">
-                                <Link to="/" className="dropdown-item">
-                                    <i className="fas fa-lightbulb"></i>
-                                    <span className="home-link-text">Lumen</span>
-                                </Link>
-                            </div>
-                            <div className="dropdown-section">
-                                <div className="dropdown-heading">Conversations</div>
-                                {chatHistory.map(conv => (
-                                    <div key={conv.id} className="dropdown-item" onClick={() => handleConversationSelect(conv)}>
-                                        Conversation started at {new Date(conv.created_at).toLocaleString()}
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="dropdown-section user-section">
-                                <div className="dropdown-item user-info" onClick={() => console.log('Redirect to settings')}>
-                                    <img src={user?.profile_picture_url} alt="Profile" className="profile-image" onError={handleImageError} />
-                                    {user ? `${user.first_name} ${user.last_name}` : '[Your Name]'}
+return (
+    <div className="prompt-container">
+        <nav className="prompt-navbar">
+            <div className="navbar-left">
+                <button
+                    className="navbar-dropdown"
+                    onClick={toggleMenu}
+                    onMouseEnter={() => setShowMenuTooltip(true)}
+                    onMouseLeave={() => setShowMenuTooltip(false)}
+                    ref={menuButtonRef}
+                >
+                    <i className="fas fa-bars-staggered"></i>
+                    {showMenuTooltip && <div className="tooltip menu-tooltip">Expand menu</div>}
+                </button>
+                {menuOpen && (
+                    <div className="left-dropdown-menu" ref={menuDropdownRef}>
+                        <div className="dropdown-section">
+                            <Link to="/" className="dropdown-item">
+                                <i className="fas fa-lightbulb"></i>
+                                <span className="home-link-text">Lumen</span>
+                            </Link>
+                        </div>
+                        <div className="dropdown-section">
+                            <div className="dropdown-heading">Conversations</div>
+                            {chatHistory.map(conv => (
+                                <div key={conv.id} className="dropdown-item" onClick={() => handleConversationSelect(conv)}>
+                                    Conversation started at {new Date(conv.created_at).toLocaleString()}
                                 </div>
+                            ))}
+                        </div>
+                        <div className="dropdown-section user-section">
+                            <div className="dropdown-item user-info" onClick={() => console.log('Redirect to settings')}>
+                                <img src={user?.profile_picture_url} alt="Profile" className="profile-image" onError={handleImageError} />
+                                {user ? `${user.first_name} ${user.last_name}` : '[Your Name]'}
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+            <div className="navbar-center">
+                <div className="model-select-wrapper" ref={modelDropdownRef}>
+                    <div className="model-select" onClick={toggleModelDropdown}>
+                        {selectedModel} <i className="fa fa-caret-down"></i>
+                    </div>
+                    {modelDropdownOpen && (
+                        <div className="model-dropdown">
+                            <div className="model-dropdown-header">
+                                <span className="model-header-text">Model</span>
+                                <i className="fa fa-info-circle"></i>
+                            </div>
+                            <div className="model-item" onClick={() => handleModelSelect('Lumen-2')}>
+                                <i className="fas fa-flask"></i>
+                                <div>
+                                    <div className="model-name">Lumen-2</div>
+                                    <div className="model-description">Experimental model under development</div>
+                                </div>
+                                {selectedModel === 'Lumen-2' && <i className="fa fa-check-circle check-mark"></i>}
+                            </div>
+                            <div className="model-item" onClick={() => handleModelSelect('Lumen-1')}>
+                                <i className="fas fa-lightbulb"></i>
+                                <div>
+                                    <div className="model-name">Lumen-1</div>
+                                    <div className="model-description">Advanced model for general tasks</div>
+                                </div>
+                                {selectedModel === 'Lumen-1' && <i className="fa fa-check-circle check-mark"></i>}
                             </div>
                         </div>
                     )}
                 </div>
-                <div className="navbar-center">
-                    <div className="model-select-wrapper" ref={modelDropdownRef}>
-                        <div className="model-select" onClick={toggleModelDropdown}>
-                            {selectedModel} <i className="fa fa-caret-down"></i>
-                        </div>
-                        {modelDropdownOpen && (
-                            <div className="model-dropdown">
-                                <div className="model-dropdown-header">
-                                    <span className="model-header-text">Model</span>
-                                    <i className="fa fa-info-circle"></i>
-                                </div>
-                                <div className="model-item" onClick={() => handleModelSelect('Lumen-2')}>
-                                    <i className="fas fa-flask"></i>
-                                    <div>
-                                        <div className="model-name">Lumen-2</div>
-                                        <div className="model-description">Experimental model under development</div>
-                                    </div>
-                                    {selectedModel === 'Lumen-2' && <i className="fa fa-check-circle check-mark"></i>}
-                                </div>
-                                <div className="model-item" onClick={() => handleModelSelect('Lumen-1')}>
-                                    <i className="fas fa-lightbulb"></i>
-                                    <div>
-                                        <div className="model-name">Lumen-1</div>
-                                        <div className="model-description">Advanced model for general tasks</div>
-                                    </div>
-                                    {selectedModel === 'Lumen-1' && <i className="fa fa-check-circle check-mark"></i>}
-                                </div>
-                            </div>
-                        )}
-                    </div>
+            </div>
+            <div className="navbar-right">
+                <button
+                    className="new-message-button"
+                    onMouseEnter={() => setShowTooltip(true)}
+                    onMouseLeave={() => setShowTooltip(false)}
+                >
+                    <i className="fa fa-pen-to-square"></i>
+                    {showTooltip && <div className="tooltip message-tooltip">New chat</div>}
+                </button>
+            </div>
+        </nav>
+        <div className={`intro ${conversationStarted ? 'hidden' : ''}`}>
+            <h1 className="greeting">Hello, {user ? user.first_name : '[Your Name]'}</h1>
+            <h1 className="help">How can I help you today?</h1>
+            <div className="example-prompts">
+                <div className="example-prompt" onClick={() => handleExampleClick("Explain what is a Call Option.")}>
+                    Explain what is a Call Option.
                 </div>
-                <div className="navbar-right">
-                    <button
-                        className="new-message-button"
-                        onMouseEnter={() => setShowTooltip(true)}
-                        onMouseLeave={() => setShowTooltip(false)}
-                    >
-                        <i className="fa fa-pen-to-square"></i>
-                        {showTooltip && <div className="tooltip message-tooltip">New chat</div>}
-                    </button>
+                <div className="example-prompt" onClick={() => handleExampleClick("Where do you see $SPX closing today?")}>
+                    Where do you see $SPX closing today?
                 </div>
-            </nav>
-            <div className={`intro ${conversationStarted ? 'hidden' : ''}`}>
-                <h1 className="greeting">Hello, {user ? user.first_name : '[Your Name]'}</h1>
-                <h1 className="help">How can I help you today?</h1>
-                <div className="example-prompts">
-                    <div className="example-prompt" onClick={() => handleExampleClick("Explain what is a Call Option.")}>
-                        Explain what is a Call Option.
-                    </div>
-                    <div className="example-prompt" onClick={() => handleExampleClick("Where do you see $SPX closing today?")}>
-                        Where do you see $SPX closing today?
-                    </div>
-                    <div className="example-prompt" onClick={() => handleExampleClick("Is $SPX currently bearish?")}>
-                        Is $SPX currently bearish?
-                    </div>
-                    <div className="example-prompt" onClick={() => handleExampleClick("What is the next major move you see with $SPX?")}>
-                        What is the next major move you see with $SPX?
-                    </div>
+                <div className="example-prompt" onClick={() => handleExampleClick("Is $SPX currently bearish?")}>
+                    Is $SPX currently bearish?
+                </div>
+                <div className="example-prompt" onClick={() => handleExampleClick("What is the next major move you see with $SPX?")}>
+                    What is the next major move you see with $SPX?
                 </div>
             </div>
-            <div className={`chat-container ${conversationStarted ? 'active' : ''}`} ref={chatContainerRef}>
-                {messages.map((msg, index) => (
-                    <div key={index} className={`chat-message ${msg.role}`}>
-                        <div className={`message-bubble ${msg.role}`}>
-                            {msg.content}
-                        </div>
+        </div>
+        <div className={`chat-container ${conversationStarted ? 'active' : ''}`} ref={chatContainerRef}>
+            {messages.map((msg, index) => (
+                <div key={index} className={`chat-message ${msg.role}`}>
+                    <div className={`message-bubble ${msg.role}`}>
+                        {msg.content}
                     </div>
+                </div>
                 ))}
             </div>
             <div className="message-input-container">

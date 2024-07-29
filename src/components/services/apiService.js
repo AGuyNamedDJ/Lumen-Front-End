@@ -1,87 +1,81 @@
 import axios from 'axios';
 
 const API_URL = 'https://lumen-0q0f.onrender.com';
+const AI_BACKEND_URL = 'https://lumen-back-end-flask.onrender.com';
 
-// http://localhost:3001/api
-// http://localhost:8000
-// https://lumen-0q0f.onrender.com
-// https://lumen-0q0f.onrender.com/api/user/me
-// https://lumen-back-end-flask.onrender.com 
-
-// Function to get the token from localStorage
 const getAuthToken = () => {
-  return localStorage.getItem('token');
+    return localStorage.getItem('token');
 };
 
 export const sendMessageToAI = async (message) => {
-  try {
-      console.log("Attempting to communicate with OpenAI ...");
-      // const response = await axios.post(`${API_URL}/conversation`, { message });
-      const response = await axios.post(`https://lumen-back-end-flask.onrender.com/conversation`, { message });
-      return response.data.response;
-  } catch (error) {
-      console.error('Error sending message to AI:', error);
-      throw error;
-  }
+    try {
+        const response = await axios.post(`${AI_BACKEND_URL}/conversation`, { 
+            message
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        console.log("AI Response:", response.data); // Log the response
+        return response.data;
+    } catch (error) {
+        console.error('Error sending message to AI:', error.response ? error.response.data : error.message);
+        throw error;
+    }
 };
 
 export const fetchChatHistoryAPI = async (userId) => {
-  try {
-      console.log("Attempting to fetch user conversations...");
-      const token = getAuthToken();
-      const response = await axios.get(`${API_URL}/api/conversations`, {
-          params: { userId },
-          headers: {
-              'Authorization': `Bearer ${token}`
-          }
-      });
-      console.log("User conversations fetched successfully:", response.data);
-      return response.data; 
-  } catch (error) {
-      console.error('Error fetching conversations:', error);
-      throw error;
-  }
+    try {
+        const token = getAuthToken();
+        const response = await axios.get(`${API_URL}/api/conversations`, {
+            params: { userId },
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching conversations:', error);
+        throw error;
+    }
 };
 
 export const fetchMessagesAPI = async (conversationId) => {
-  try {
-    console.log("Attempting to fetch user messages...");
-    const token = getAuthToken();
-    const response = await axios.get(`${API_URL}/api/messages`, {
-      params: { conversationId },
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-    console.log("User messages fetched successfully:", response.data);
-    return response.data; 
-  } catch (error) {
-    console.error('Error fetching messages:', error);
-    throw error;
-  }
+    try {
+        const token = getAuthToken();
+        const response = await axios.get(`${API_URL}/api/messages`, {
+            params: { conversationId },
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching messages:', error);
+        throw error;
+    }
 };
-
-// Save Messages to Database
-const saveMessage = async (conversationId, role, content) => {
-  try {
-    const response = await axios.post(`${API_URL}/api/messages`, {
-      conversationId,
-      role,
-      content
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error saving message to the database:', error);
-    throw error;
-  }
-};
-
 export const saveMessagesToDatabase = async (conversationId, userMessage, aiMessage) => {
-  try {
-    await saveMessage(conversationId, userMessage.role, userMessage.content);
-    await saveMessage(conversationId, aiMessage.role, aiMessage.content);
-  } catch (error) {
-    console.error('Error saving messages to the database:', error);
-    throw error;
-  }
+    try {
+        if (!conversationId || !userMessage.role || !userMessage.content || !aiMessage.role || !aiMessage.content) {
+            throw new Error('Missing required fields');
+        }
+
+        console.log('Saving user message to the database:', { conversationId, role: userMessage.role, content: userMessage.content });
+        await axios.post(`${API_URL}/api/messages`, {
+            conversationId,
+            role: userMessage.role,
+            content: userMessage.content
+        });
+
+        console.log('Saving AI message to the database:', { conversationId, role: aiMessage.role, content: aiMessage.content });
+        await axios.post(`${API_URL}/api/messages`, {
+            conversationId,
+            role: aiMessage.role,
+            content: aiMessage.content
+        });
+    } catch (error) {
+        console.error('Error saving messages to the database:', error.response ? error.response.data : error.message);
+        throw error;
+    }
 };
