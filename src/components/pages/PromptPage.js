@@ -165,7 +165,7 @@ const PromptPage = () => {
         // Set the new prompt as a message
         setTimeout(() => handleSendMessage(), 100);
     };
-        
+
     const handleSendMessage = async () => {
         if (message.trim() === "") return;
     
@@ -339,21 +339,21 @@ return (
                 </button>
                 {menuOpen && (
                     <div className="left-dropdown-menu" ref={menuDropdownRef}>
-                        <div className="dropdown-section">
+                        <div className="dropdown-heading lumen">
                             <Link to="/" className="dropdown-item">
                                 <i className="fas fa-lightbulb"></i>
                                 <span className="home-link-text">Lumen</span>
                             </Link>
                         </div>
+                        <div className="dropdown-heading">Conversations</div>
                         <div className="dropdown-section">
-                            <div className="dropdown-heading">Conversations</div>
                             {chatHistory.map(conv => (
                                 <div key={conv.id} className="dropdown-item" onClick={() => handleConversationSelect(conv)}>
                                     Conversation started at {new Date(conv.created_at).toLocaleString()}
                                 </div>
                             ))}
                         </div>
-                        <div className="dropdown-section user-section">
+                        <div className="user-section">
                             <div className="dropdown-item user-info" onClick={() => console.log('Redirect to settings')}>
                                 <img src={user?.profile_picture_url} alt="Profile" className="profile-image" onError={handleImageError} />
                                 {user ? `${user.first_name} ${user.last_name}` : '[Your Name]'}

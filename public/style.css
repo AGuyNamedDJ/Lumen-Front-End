@@ -744,37 +744,53 @@ body, html {
     display: flex;
     flex-direction: column;
     position: absolute;
-    top: 4.5rem; /* Adjusted to match the navbar height */
+    top: 4.5rem;
     left: 0;
     background-color: #1a1a1a;
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.2);
     border-radius: 0.5rem;
     overflow: hidden;
     z-index: 1001;
-    width: 18.75rem; /* Adjusted to 18.75rem */
-    height: calc(100vh - 4rem); /* Adjusted to match the navbar height */
-    padding: 1rem;
+    width: 18.75rem;
+    max-height: calc(100vh - 4rem);
     border: 0.0625rem solid rgba(255, 255, 255, 0.1);
 }
 
 .dropdown-section {
-    padding: 1rem;
-    margin-bottom: 1rem;
+    overflow-y: auto;
+    padding-bottom: 5rem; /* Add space for the user section */
 }
 
-.dropdown-heading {
-    color: #bbb;
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
+.dropdown-heading,
+.dropdown-item.lumen {
+    padding: 1rem;
+    padding-left: 2rem;
+    background-color: #121212;
+    position: sticky;
+    top: 0;
+    z-index: 10;
     text-align: left;
-    padding: 1vh;
-    padding-left: 1vh;
+    font-size: 1.3rem;
+    opacity: 70%;
+}
+
+.user-section {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: -0.5rem;
+    left: 0;
+    width: 100%;
+    padding: 1rem;
+    background-color: #121212;
+    z-index: 10;
+    border-top: 0.0625rem solid rgba(255, 255, 255, 0.1);
 }
 
 .dropdown-item {
     padding: 0.5rem 1rem;
     color: white;
     cursor: pointer;
+    padding-left: 2rem;
     display: flex;
     font-size: 1.1rem;
     transition: background-color 0.3s;
