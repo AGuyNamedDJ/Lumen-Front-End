@@ -731,6 +731,14 @@ body, html {
     opacity: 60%;
     margin-left: 20%;
 }
+
+.navbar-dropdown:hover {
+    opacity: 80%;
+}
+
+.navbar-dropdown:active {
+    opacity: 100%;
+}
   
 .left-dropdown-menu {
     display: flex;
@@ -970,6 +978,14 @@ body, html {
 .new-message-button i {
     font-size: 1.8rem; /* Adjust icon size */
     opacity: 65%;
+}
+
+.new-message-button:hover I {
+    opacity: 80%;
+}
+
+.new-message-button:active I {
+    opacity: 100%;
 }
 
 /* Chat Container */
