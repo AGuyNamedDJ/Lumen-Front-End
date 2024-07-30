@@ -213,75 +213,92 @@ const PromptPage = () => {
         // Send the message to the backend and handle the response
         try {
             const aiResponse = await sendMessageToAI(message);
+            console.log("Full AI Response from API:", aiResponse);
+    
+            // Extracting content based on possible structures
+            const aiMessageContent = aiResponse.response || aiResponse.content || JSON.stringify(aiResponse);
+            console.log("Extracted AI Message Content:", aiMessageContent);
+    
+            if (typeof aiMessageContent !== 'string') {
+                console.error('AI Message Content is not a string:', aiMessageContent);
+                throw new Error('AI response is not a valid string');
+            }
+    
+            const aiMessage = { role: 'ai', content: aiMessageContent };
+            console.log("AI Message Object:", aiMessage);
     
             // Save user message and AI response to the database
-            await saveMessagesToDatabase(newConversationId, userMessage, { role: 'ai', content: aiResponse.response });
+            await saveMessagesToDatabase(newConversationId, userMessage, aiMessage);
     
             // Type AI response gradually
-            typeResponse(aiResponse.response);
+            typeResponse(aiMessageContent);
         } catch (error) {
             console.error('Error sending message to AI:', error);
         }
     };
-        
-const typeResponse = (response) => {
-    let index = -1; // Start from the first character
-    const typingSpeeds = [
-        { speed: 6, duration: 5000 },
-        { speed: 12, duration: 7000 },
-        { speed: 18, duration: 6000 },
-        { speed: 35, duration: 3000 },
-    ];
 
-    let currentSpeed = typingSpeeds[0].speed;
-    let currentDuration = typingSpeeds[0].duration;
-    let elapsed = 0;
-
-    const initializeResponse = () => {
-        setMessages(prev => {
-            const newConversation = [...prev, { role: 'ai', content: '', typing: true }];
-            return newConversation;
-        });
-    };
-
-    const typeNextChar = () => {
-        if (index < response.length) {
+    const typeResponse = (response) => {
+        let index = -1; // Start from the first character
+        const typingSpeeds = [
+            { speed: 6, duration: 5000 },
+            { speed: 12, duration: 7000 },
+            { speed: 18, duration: 6000 },
+            { speed: 35, duration: 3000 },
+        ];
+    
+        let currentSpeed = typingSpeeds[0].speed;
+        let currentDuration = typingSpeeds[0].duration;
+        let elapsed = 0;
+    
+        const initializeResponse = () => {
             setMessages(prev => {
-                const lastMessage = prev[prev.length - 1];
-                if (lastMessage && lastMessage.role === 'ai' && lastMessage.typing) {
-                    const updatedMessage = { ...lastMessage, content: lastMessage.content + response.charAt(index) };
-                    const newConversation = [...prev.slice(0, prev.length - 1), updatedMessage];
-                    return newConversation;
-                }
-                return prev;
+                const newConversation = [...prev, { role: 'ai', content: '', typing: true }];
+                return newConversation;
             });
-            index++;
-            elapsed += currentSpeed;
-
-            if (elapsed >= currentDuration) {
-                const nextTypingSpeed = typingSpeeds[Math.floor(Math.random() * typingSpeeds.length)];
-                currentSpeed = nextTypingSpeed.speed;
-                currentDuration = nextTypingSpeed.duration;
-                elapsed = 0;
+        };
+    
+        const typeNextChar = () => {
+            if (index < response.length) {
+                setMessages(prev => {
+                    const lastMessage = prev[prev.length - 1];
+                    if (lastMessage && lastMessage.role === 'ai' && lastMessage.typing) {
+                        const updatedMessage = { ...lastMessage, content: lastMessage.content + response.charAt(index) };
+                        const newConversation = [...prev.slice(0, prev.length - 1), updatedMessage];
+                        return newConversation;
+                    }
+                    return prev;
+                });
+                index++;
+                elapsed += currentSpeed;
+    
+                if (elapsed >= currentDuration) {
+                    const nextTypingSpeed = typingSpeeds[Math.floor(Math.random() * typingSpeeds.length)];
+                    currentSpeed = nextTypingSpeed.speed;
+                    currentDuration = nextTypingSpeed.duration;
+                    elapsed = 0;
+                }
+    
+                setTimeout(typeNextChar, currentSpeed); // Schedule the next character
+            } else {
+                setMessages(prev => {
+                    const lastMessage = prev[prev.length - 1];
+                    if (lastMessage && lastMessage.role === 'ai' && lastMessage.typing) {
+                        const updatedMessage = { ...lastMessage, typing: false };
+                        const newConversation = [...prev.slice(0, prev.length - 1), updatedMessage];
+                        return newConversation;
+                    }
+                    return prev;
+                });
             }
-
-            setTimeout(typeNextChar, currentSpeed); // Schedule the next character
+        };
+    
+        if (response && typeof response === 'string') {
+            initializeResponse();
+            setTimeout(() => typeNextChar(), 1000); // Introduce a 1-second delay before starting the typing
         } else {
-            setMessages(prev => {
-                const lastMessage = prev[prev.length - 1];
-                if (lastMessage && lastMessage.role === 'ai' && lastMessage.typing) {
-                    const updatedMessage = { ...lastMessage, typing: false };
-                    const newConversation = [...prev.slice(0, prev.length - 1), updatedMessage];
-                    return newConversation;
-                }
-                return prev;
-            });
+            console.error('Response is not a valid string:', response);
         }
     };
-
-    initializeResponse();
-    setTimeout(() => typeNextChar(), 1000); // Introduce a 1-second delay before starting the typing
-};
 
 const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {

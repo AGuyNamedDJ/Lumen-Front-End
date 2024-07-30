@@ -16,10 +16,10 @@ export const sendMessageToAI = async (message) => {
                 'Content-Type': 'application/json'
             }
         });
-        console.log("AI Response:", response.data); // Log the response
-        return response.data;
+        console.log("Full AI Response from API:", response.data);
+        return response.data; // Ensure this returns the correct structure
     } catch (error) {
-        console.error('Error sending message to AI:', error.response ? error.response.data : error.message);
+        console.error('Error communicating with AI:', error.response ? error.response.data : error.message);
         throw error;
     }
 };
@@ -55,20 +55,17 @@ export const fetchMessagesAPI = async (conversationId) => {
         throw error;
     }
 };
+
 export const saveMessagesToDatabase = async (conversationId, userMessage, aiMessage) => {
     try {
-        if (!conversationId || !userMessage.role || !userMessage.content || !aiMessage.role || !aiMessage.content) {
-            throw new Error('Missing required fields');
-        }
-
-        console.log('Saving user message to the database:', { conversationId, role: userMessage.role, content: userMessage.content });
+        console.log("Saving user message to the database:", { conversationId, role: userMessage.role, content: userMessage.content });
         await axios.post(`${API_URL}/api/messages`, {
             conversationId,
             role: userMessage.role,
             content: userMessage.content
         });
 
-        console.log('Saving AI message to the database:', { conversationId, role: aiMessage.role, content: aiMessage.content });
+        console.log("Saving AI message to the database:", { conversationId, role: aiMessage.role, content: aiMessage.content });
         await axios.post(`${API_URL}/api/messages`, {
             conversationId,
             role: aiMessage.role,
