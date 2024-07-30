@@ -30,6 +30,10 @@ const PromptPage = () => {
     const toggleModelDropdown = () => {
         setModelDropdownOpen(!modelDropdownOpen);
     };
+    
+    const handleRefresh = () => {
+        window.location.reload();
+    };   
 
     const handleModelSelect = (model) => {
         setSelectedModel(model);
@@ -151,19 +155,24 @@ const PromptPage = () => {
 
     const handleExampleClick = async (prompt) => {
         setMessage(prompt);
-
+    
         // Clear previous conversation and messages
         setCurrentConversation(null);
         setCurrentConversationId(null);
         setMessages([]);
         setConversationStarted(false);
-
+    
         // Set the new prompt as a message
         setTimeout(() => handleSendMessage(), 100);
     };
-
+        
     const handleSendMessage = async () => {
         if (message.trim() === "") return;
+    
+        if (!user) {
+            console.error('User is not authenticated');
+            return;
+        }
     
         setConversationStarted(true); // Set conversation started to true
     
@@ -173,6 +182,8 @@ const PromptPage = () => {
         // Create a new conversation if one doesn't exist
         if (!currentConversationId) {
             try {
+                console.log("Creating new conversation with userId:", user.id);
+    
                 const response = await fetch('https://lumen-0q0f.onrender.com/api/conversations', {
                     method: 'POST',
                     headers: {
@@ -181,7 +192,12 @@ const PromptPage = () => {
                     body: JSON.stringify({ userId: user.id })
                 });
     
+                console.log("Server response status:", response.status);
+                console.log("Server response status text:", response.statusText);
+    
                 if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Failed to create a new conversation. Server responded with:', errorText);
                     throw new Error('Failed to create a new conversation');
                 }
     
@@ -299,14 +315,14 @@ const PromptPage = () => {
             console.error('Response is not a valid string:', response);
         }
     };
-
-const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleSendMessage();
-    }
-};
-
+    
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSendMessage();
+        }
+    };
+    
 return (
     <div className="prompt-container">
         <nav className="prompt-navbar">
@@ -378,15 +394,16 @@ return (
                 </div>
             </div>
             <div className="navbar-right">
-                <button
-                    className="new-message-button"
-                    onMouseEnter={() => setShowTooltip(true)}
-                    onMouseLeave={() => setShowTooltip(false)}
-                >
-                    <i className="fa fa-pen-to-square"></i>
-                    {showTooltip && <div className="tooltip message-tooltip">New chat</div>}
-                </button>
-            </div>
+            <button
+                className="new-message-button"
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+                onClick={handleRefresh}
+            >
+                <i className="fa fa-pen-to-square"></i>
+                {showTooltip && <div className="tooltip message-tooltip">New chat</div>}
+            </button>
+        </div>
         </nav>
         <div className={`intro ${conversationStarted ? 'hidden' : ''}`}>
             <h1 className="greeting">Hello, {user ? user.first_name : '[Your Name]'}</h1>

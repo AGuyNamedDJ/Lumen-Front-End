@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/utilities/ProtectedRoute";
 // Import: Pages
 import AboutUs from "./components/pages/AboutUs";
 import CommunitySupport from "./components/pages/CommunitySupport";
+import ConditionalHomePage from "./components/utilities/conditionalHomePage";
 import ContactUs from "./components/pages/ContactUs";
 import CustomerSupport from "./components/pages/CustomerSupport";
 import CookiesPolicy from "./components/pages/CookiesPolicy";
@@ -20,6 +21,7 @@ import Documentation from "./components/pages/Documentation";
 import HomePage from "./components/pages/HomePage";
 import HowToGuides from "./components/pages/HowToGuides";
 import LatestAdvancements from "./components/pages/LatestAdvancements";
+import LoggedInHomePage from "./components/pages/LoggedInHomePage";
 import LoginPage from "./components/pages/LoginPage";
 import Lumen1 from "./components/pages/Lumen1";
 import Lumen2 from "./components/pages/Lumen2";
@@ -48,7 +50,7 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <HomePage />
+                element: <ConditionalHomePage /> // Use ConditionalHomePage here
             },
             {
                 path: "about-us",

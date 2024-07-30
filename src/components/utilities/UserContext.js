@@ -1,3 +1,4 @@
+// UserContext.js
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -32,15 +33,12 @@ export const UserProvider = ({ children }) => {
             } catch (error) {
                 console.error("Failed to fetch user data:", error);
                 if (error.response) {
-                    // Server responded with a status other than 200 range
                     console.error("Error response data:", error.response.data);
                     console.error("Error response status:", error.response.status);
                     console.error("Error response headers:", error.response.headers);
                 } else if (error.request) {
-                    // Request was made but no response was received
                     console.error("Error request data:", error.request);
                 } else {
-                    // Something happened in setting up the request
                     console.error("Error message:", error.message);
                 }
                 setUser(null);
