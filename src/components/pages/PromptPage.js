@@ -228,7 +228,7 @@ const PromptPage = () => {
     
         // Send the message to the backend and handle the response
         try {
-            const aiResponse = await sendMessageToAI(message);
+            const aiResponse = await sendMessageToAI(message, selectedModel); // Pass selected model here
             console.log("Full AI Response from API:", aiResponse);
     
             // Extracting content based on possible structures
@@ -252,7 +252,7 @@ const PromptPage = () => {
             console.error('Error sending message to AI:', error);
         }
     };
-
+    
     const typeResponse = (response) => {
         let index = -1; // Start from the first character
         const typingSpeeds = [
